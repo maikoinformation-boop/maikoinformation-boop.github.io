@@ -379,9 +379,63 @@ function buildResult(name,bday,gender){
   document.getElementById('today-date-label').textContent=`${todayY}年${todayM}月${todayD}日`;
   document.getElementById('today-kan-shi').textContent=KAN[todayP.kan]+SHI[todayP.shi];
   const tg=GOGYOU[todayP.kan];
+  const myG=GOGYOU[dayP.kan];
   document.getElementById('today-element').textContent=`${tg}行・${YIN_YANG[todayP.kan]}の日 ／ ${KAN_R[todayP.kan]}${SHI_R[todayP.shi]}`;
-  const tdesc={'木':'成長と発展のエネルギー。新しい芽吹きを感じる日。','火':'情熱と輝きが満ちる日。積極性が幸運を呼び込みます。','土':'安定と調和の日。地に足をつけて丁寧に過ごして。','金':'決断と収穫の日。物事の区切りをつけるのに最適。','水':'知恵と柔軟性の日。流れに身を任せると道が開けます。'};
-  document.getElementById('today-desc').textContent=tdesc[tg];
+
+  // 五行の相性（今日 vs あなたの日柱）でパーソナライズ
+  const seisho={'木':'火','火':'土','土':'金','金':'水','水':'木'}; // 相生（生む）
+  const sokoku={'木':'土','土':'水','水':'火','火':'金','金':'木'}; // 相克（剋す）
+  let personalDesc;
+  if(seisho[tg]===myG){
+    // 今日の五行がわたしの五行を生む → 最高の相性
+    const msgs=[
+      `今日の${tg}のエネルギーがあなたの${myG}の力を育んでいます。自然な流れの中で物事が前進しやすい日。新しいことへの挑戦が吉。`,
+      `今日はあなたにとって特別に恵まれた日です。今日の天の気があなたの本来の力を引き出してくれます。直感を信じて動いて。`,
+      `天のエネルギーとあなたの命の気が美しく調和しています。今日やることはすべて良い方向へ向かいます。積極的に行動して。`,
+    ];
+    personalDesc=msgs[(day+todayD)%3];
+  } else if(seisho[myG]===tg){
+    // わたしの五行が今日を生む → 自分のエネルギーを使う日
+    const msgs=[
+      `あなたの${myG}のエネルギーが今日の天に力を与えています。周りのために動くことで、巡り巡ってあなたに恵みが戻ってきます。`,
+      `今日は自分のエネルギーを惜しまず使う日。誰かへの親切や貢献が、未来の大きな幸運の種になります。`,
+      `あなたの本来の力が今日の天に響いています。ギブの精神で過ごすと、思わぬ形で幸運が舞い込んできます。`,
+    ];
+    personalDesc=msgs[(day+todayD)%3];
+  } else if(sokoku[tg]===myG){
+    // 今日の五行があなたを剋す → 少し注意の日
+    const msgs=[
+      `今日の天の気があなたの気質に少し逆風となる日。無理に押し進めず、慎重に確認しながら進むと安心です。`,
+      `今日はいつもより丁寧に、ゆっくり行動することで安定します。焦らず、一つひとつ確実にこなす日です。`,
+      `少し抵抗を感じる場面があるかもしれませんが、それは天があなたに「立ち止まって考えて」と伝えているサイン。深呼吸して。`,
+    ];
+    personalDesc=msgs[(day+todayD)%3];
+  } else if(sokoku[myG]===tg){
+    // あなたが今日の天を剋す → 突破力がある日
+    const msgs=[
+      `あなたの${myG}の力が今日の天の流れを動かせる日。困難に見えることでも、あなたなら乗り越えられる強さがあります。`,
+      `今日は決断と行動の日。あなたの意志の力が最大限に発揮されます。迷っていたことに決着をつけるのに最適です。`,
+      `あなたの命の気が今日の天を超える力を持っています。自分への信頼を持って、堂々と前に進んでください。`,
+    ];
+    personalDesc=msgs[(day+todayD)%3];
+  } else if(tg===myG){
+    // 同気 → 共鳴する日
+    const msgs=[
+      `今日の天の気とあなたの命の気が同じ${tg}。深い共鳴の日です。自分らしくいることが最大の開運になります。`,
+      `あなたの本質が今日の天とぴったり重なっています。「ありのままの自分」で過ごすことで、不思議なほど物事が整っていきます。`,
+      `今日はあなたにとって「自分に還る日」。無理せず、心が喜ぶことを選んで過ごすと運気が上がります。`,
+    ];
+    personalDesc=msgs[(day+todayD)%3];
+  } else {
+    // その他
+    const msgs=[
+      `今日の${tg}のエネルギーとあなたの${myG}の気が静かに交わっています。普段通りに丁寧に過ごすことが運気を安定させます。`,
+      `穏やかな天の気の中、あなたの命の力がしっかり根を張っています。焦らず、今日という日を大切に刻んで。`,
+      `今日は特別なことをしなくても大丈夫。あなたが在るだけで、周りに良い気が流れています。`,
+    ];
+    personalDesc=msgs[(day+todayD)%3];
+  }
+  document.getElementById('today-desc').textContent=personalDesc;
   document.getElementById('fortune-sections').innerHTML=[
     {icon:'✦',title:'総合運',msg:oMsg,star:oStar},
     {icon:'♡',title:'愛情運',msg:lMsg,star:lStar},
