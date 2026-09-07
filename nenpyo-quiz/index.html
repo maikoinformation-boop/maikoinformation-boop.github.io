@@ -6,12 +6,31 @@
 <title>三国年表クイズ ― 日本史・世界史・韓国史</title>
 <style>
 :root{
-  --jp:#d6484f; --jp-bg:#fdecec; --jp-bg2:#fbdadb;
-  --kr:#2f6fbf; --kr-bg:#e9f1fb; --kr-bg2:#d7e6f7;
-  --wd:#3f9153; --wd-bg:#eaf6ec; --wd-bg2:#d7eedb;
+  --jp:#d6484f; --jp-ink:#b23138; --jp-bg:#fdecec; --jp-bg2:#fbdadb;
+  --kr:#2f6fbf; --kr-ink:#1f5a99; --kr-bg:#e9f1fb; --kr-bg2:#d7e6f7;
+  --wd:#3f9153; --wd-ink:#256b34; --wd-bg:#eaf6ec; --wd-bg2:#d7eedb;
   --ink:#2b2b33; --sub:#767685; --line:#e6e3e8;
-  --bg:#faf9fb; --card:#ffffff; --accent:#7a5cf0;
+  --bg:#faf9fb; --card:#ffffff; --accent:#7a5cf0; --accent2:#a084f7; --accent-tint:#f4f1fc;
+  --overlay:rgba(255,255,255,.6); --opt-hover:#f5f3fa; --scrim:rgba(30,20,45,.5);
   --radius:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --jp:#e2666c; --jp-ink:#ff9aa0; --jp-bg:#3a1f22; --jp-bg2:#4a262a;
+    --kr:#5c94dd; --kr-ink:#8fbdf2; --kr-bg:#1c2a3a; --kr-bg2:#22344a;
+    --wd:#5aa869; --wd-ink:#8fdb9c; --wd-bg:#1c2e20; --wd-bg2:#223a27;
+    --ink:#eceaf2; --sub:#a6a3b5; --line:#332f3d;
+    --bg:#131019; --card:#1d1a25; --accent:#a48cf6; --accent2:#7c62c9; --accent-tint:#26213a;
+    --overlay:rgba(0,0,0,.28); --opt-hover:#26212f; --scrim:rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --jp:#e2666c; --jp-ink:#ff9aa0; --jp-bg:#3a1f22; --jp-bg2:#4a262a;
+  --kr:#5c94dd; --kr-ink:#8fbdf2; --kr-bg:#1c2a3a; --kr-bg2:#22344a;
+  --wd:#5aa869; --wd-ink:#8fdb9c; --wd-bg:#1c2e20; --wd-bg2:#223a27;
+  --ink:#eceaf2; --sub:#a6a3b5; --line:#332f3d;
+  --bg:#131019; --card:#1d1a25; --accent:#a48cf6; --accent2:#7c62c9; --accent-tint:#26213a;
+  --overlay:rgba(0,0,0,.28); --opt-hover:#26212f; --scrim:rgba(0,0,0,.6);
 }
 *,*::before,*::after{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
@@ -39,9 +58,9 @@ main{padding:14px 14px 40px;}
 
 .legend{display:flex; gap:8px; margin-bottom:12px; font-size:11px; flex-wrap:wrap;}
 .legend span{display:inline-flex; align-items:center; gap:4px; padding:4px 9px; border-radius:999px; font-weight:700;}
-.legend .l-jp{background:var(--jp-bg); color:var(--jp);}
-.legend .l-kr{background:var(--kr-bg); color:var(--kr);}
-.legend .l-wd{background:var(--wd-bg); color:var(--wd);}
+.legend .l-jp{background:var(--jp-bg); color:var(--jp-ink);}
+.legend .l-kr{background:var(--kr-bg); color:var(--kr-ink);}
+.legend .l-wd{background:var(--wd-bg); color:var(--wd-ink);}
 
 .era-card{
   background:var(--card); border-radius:var(--radius); margin-bottom:12px; overflow:hidden;
@@ -49,7 +68,7 @@ main{padding:14px 14px 40px;}
 }
 .era-head{
   padding:8px 14px; font-size:12px; font-weight:800; color:#fff;
-  background:linear-gradient(90deg,var(--accent),#a084f7);
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
 }
 .era-cols{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--line);}
 .col{background:var(--card); padding:10px 8px; display:flex; flex-direction:column; gap:6px;}
@@ -65,7 +84,7 @@ main{padding:14px 14px 40px;}
 .col.wd .col-badge{background:var(--wd);}
 .col-period{font-size:10px; color:var(--sub); font-weight:700; margin-top:2px;}
 .event-btn{
-  appearance:none; border:none; background:rgba(255,255,255,.6); text-align:left; padding:7px 8px;
+  appearance:none; border:none; background:var(--overlay); text-align:left; padding:7px 8px;
   border-radius:9px; font-size:12.5px; line-height:1.5; color:var(--ink); font-family:inherit;
   cursor:pointer; font-weight:600;
 }
@@ -75,12 +94,12 @@ main{padding:14px 14px 40px;}
 
 /* modal */
 .modal-overlay{
-  position:fixed; inset:0; background:rgba(30,20,45,.5); z-index:100; display:none;
+  position:fixed; inset:0; background:var(--scrim); z-index:100; display:none;
   align-items:flex-end; justify-content:center;
 }
 .modal-overlay.show{display:flex;}
 .modal-box{
-  background:#fff; width:100%; max-width:520px; border-radius:20px 20px 0 0; padding:22px 20px 28px;
+  background:var(--card); width:100%; max-width:520px; border-radius:20px 20px 0 0; padding:22px 20px 28px;
   max-height:82vh; overflow-y:auto; animation:slideup .22s ease-out;
 }
 @keyframes slideup{from{transform:translateY(24px);opacity:0;}to{transform:translateY(0);opacity:1;}}
@@ -89,7 +108,7 @@ main{padding:14px 14px 40px;}
 .modal-row.jp{background:var(--jp-bg);} .modal-row.kr{background:var(--kr-bg);} .modal-row.wd{background:var(--wd-bg);}
 .modal-row b{flex-shrink:0; font-size:11px; padding:2px 7px; border-radius:6px; color:#fff;}
 .modal-row.jp b{background:var(--jp);} .modal-row.kr b{background:var(--kr);} .modal-row.wd b{background:var(--wd);}
-.modal-link{margin-top:14px; padding:14px; border-radius:12px; background:#f4f1fc; font-size:13.5px; font-weight:600;}
+.modal-link{margin-top:14px; padding:14px; border-radius:12px; background:var(--accent-tint); font-size:13.5px; font-weight:600;}
 .modal-link .tag{display:block; font-size:10.5px; font-weight:800; color:var(--accent); margin-bottom:6px; letter-spacing:.05em;}
 .modal-close{
   display:block; width:100%; margin-top:18px; padding:12px; border:none; border-radius:12px;
@@ -108,22 +127,22 @@ main{padding:14px 14px 40px;}
 .q-subject{
   padding:14px; border-radius:12px; font-size:15px; font-weight:700; margin-bottom:16px; text-align:center;
 }
-.q-subject.jp{background:var(--jp-bg); color:var(--jp);}
-.q-subject.kr{background:var(--kr-bg); color:var(--kr);}
-.q-subject.wd{background:var(--wd-bg); color:var(--wd);}
-.q-subject.era{background:#f1edfb; color:var(--accent);}
+.q-subject.jp{background:var(--jp-bg); color:var(--jp-ink);}
+.q-subject.kr{background:var(--kr-bg); color:var(--kr-ink);}
+.q-subject.wd{background:var(--wd-bg); color:var(--wd-ink);}
+.q-subject.era{background:var(--accent-tint); color:var(--accent);}
 .opt-list{display:flex; flex-direction:column; gap:9px;}
 .opt-btn{
-  text-align:left; padding:13px 14px; border-radius:12px; border:2px solid var(--line); background:#fff;
+  text-align:left; padding:13px 14px; border-radius:12px; border:2px solid var(--line); background:var(--card);
   font-size:14px; font-weight:600; font-family:inherit; cursor:pointer; color:var(--ink);
 }
-.opt-btn:active{background:#f5f3fa;}
-.opt-btn.correct{border-color:var(--wd); background:var(--wd-bg); color:#1f5c2c;}
-.opt-btn.wrong{border-color:var(--jp); background:var(--jp-bg); color:#8f2a2f;}
+.opt-btn:active{background:var(--opt-hover);}
+.opt-btn.correct{border-color:var(--wd); background:var(--wd-bg); color:var(--wd-ink);}
+.opt-btn.wrong{border-color:var(--jp); background:var(--jp-bg); color:var(--jp-ink);}
 .opt-btn:disabled{cursor:default;}
 .result-banner{text-align:center; font-weight:800; font-size:16px; padding:10px; border-radius:10px; margin-bottom:14px;}
-.result-banner.ok{background:var(--wd-bg); color:#1f5c2c;}
-.result-banner.ng{background:var(--jp-bg); color:#8f2a2f;}
+.result-banner.ok{background:var(--wd-bg); color:var(--wd-ink);}
+.result-banner.ng{background:var(--jp-bg); color:var(--jp-ink);}
 .done-box{text-align:center; padding:30px 10px;}
 .done-emoji{font-size:44px;}
 .stat-row{display:flex; justify-content:center; gap:18px; margin:16px 0; font-size:13px;}
@@ -459,7 +478,7 @@ function renderTodayResult(area, state, rec){
       <span class="q-tag">${rec.subjectLabel}</span>
       <div class="q-prompt">${rec.prompt}</div>
       <div class="q-subject era">${rec.subjectText}</div>
-      <div class="modal-row" style="background:#f1edfb;margin-top:10px;"><b style="background:var(--accent)">正解</b><span>${rec.correctText}</span></div>
+      <div class="modal-row" style="background:var(--accent-tint);margin-top:10px;"><b style="background:var(--accent)">正解</b><span>${rec.correctText}</span></div>
       <div class="modal-link"><span class="tag">三つの歴史のつながり（${rec.era}）</span>${rec.connection}</div>
       <div class="lock-sub" style="text-align:center;margin-top:14px;">今日の挑戦はここまで。また明日 19:00 に次の問題が挑戦できます。</div>
     </div>`;
