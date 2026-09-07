@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>三国年表クイズ ― 日本史・世界史・韓国史</title>
+<style>
+:root{
+  --jp:#d6484f; --jp-bg:#fdecec; --jp-bg2:#fbdadb;
+  --kr:#2f6fbf; --kr-bg:#e9f1fb; --kr-bg2:#d7e6f7;
+  --wd:#3f9153; --wd-bg:#eaf6ec; --wd-bg2:#d7eedb;
+  --ink:#2b2b33; --sub:#767685; --line:#e6e3e8;
+  --bg:#faf9fb; --card:#ffffff; --accent:#7a5cf0;
+  --radius:16px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Yu Gothic",Meiryo,sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.7; -webkit-tap-highlight-color:transparent;
+  padding-bottom:24px;
+}
+.app{max-width:520px;margin:0 auto;}
+header.top{
+  position:sticky; top:0; z-index:20; background:var(--bg);
+  padding:14px 16px 0; border-bottom:1px solid var(--line);
+}
+h1{font-size:16px; font-weight:800; margin:0 0 10px; text-align:center; letter-spacing:.02em;}
+h1 small{display:block; font-size:11px; font-weight:600; color:var(--sub); margin-top:2px;}
+.tabs{display:flex; gap:6px; padding-bottom:10px;}
+.tab-btn{
+  flex:1; padding:10px 4px; border:none; border-radius:12px 12px 0 0; background:transparent;
+  font-size:14px; font-weight:700; color:var(--sub); cursor:pointer;
+}
+.tab-btn.active{background:var(--card); color:var(--accent); box-shadow:0 -2px 0 var(--accent) inset;}
+main{padding:14px 14px 40px;}
+.view{display:none;}
+.view.active{display:block;}
+
+.legend{display:flex; gap:8px; margin-bottom:12px; font-size:11px; flex-wrap:wrap;}
+.legend span{display:inline-flex; align-items:center; gap:4px; padding:4px 9px; border-radius:999px; font-weight:700;}
+.legend .l-jp{background:var(--jp-bg); color:var(--jp);}
+.legend .l-kr{background:var(--kr-bg); color:var(--kr);}
+.legend .l-wd{background:var(--wd-bg); color:var(--wd);}
+
+.era-card{
+  background:var(--card); border-radius:var(--radius); margin-bottom:12px; overflow:hidden;
+  box-shadow:0 1px 3px rgba(20,10,40,.06); border:1px solid var(--line);
+}
+.era-head{
+  padding:8px 14px; font-size:12px; font-weight:800; color:#fff;
+  background:linear-gradient(90deg,var(--accent),#a084f7);
+}
+.era-cols{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--line);}
+.col{background:var(--card); padding:10px 8px; display:flex; flex-direction:column; gap:6px;}
+.col.jp{background:var(--jp-bg);}
+.col.kr{background:var(--kr-bg);}
+.col.wd{background:var(--wd-bg);}
+.col-badge{
+  display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px;
+  border-radius:50%; color:#fff; font-size:11px; font-weight:800; flex-shrink:0;
+}
+.col.jp .col-badge{background:var(--jp);}
+.col.kr .col-badge{background:var(--kr);}
+.col.wd .col-badge{background:var(--wd);}
+.col-period{font-size:10px; color:var(--sub); font-weight:700; margin-top:2px;}
+.event-btn{
+  appearance:none; border:none; background:rgba(255,255,255,.6); text-align:left; padding:7px 8px;
+  border-radius:9px; font-size:12.5px; line-height:1.5; color:var(--ink); font-family:inherit;
+  cursor:pointer; font-weight:600;
+}
+.col.jp .event-btn:active{background:var(--jp-bg2);}
+.col.kr .event-btn:active{background:var(--kr-bg2);}
+.col.wd .event-btn:active{background:var(--wd-bg2);}
+
+/* modal */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(30,20,45,.5); z-index:100; display:none;
+  align-items:flex-end; justify-content:center;
+}
+.modal-overlay.show{display:flex;}
+.modal-box{
+  background:#fff; width:100%; max-width:520px; border-radius:20px 20px 0 0; padding:22px 20px 28px;
+  max-height:82vh; overflow-y:auto; animation:slideup .22s ease-out;
+}
+@keyframes slideup{from{transform:translateY(24px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-era{font-size:12px; font-weight:800; color:var(--accent); margin-bottom:10px;}
+.modal-row{display:flex; gap:8px; align-items:flex-start; padding:8px 10px; border-radius:10px; margin-bottom:6px; font-size:13.5px;}
+.modal-row.jp{background:var(--jp-bg);} .modal-row.kr{background:var(--kr-bg);} .modal-row.wd{background:var(--wd-bg);}
+.modal-row b{flex-shrink:0; font-size:11px; padding:2px 7px; border-radius:6px; color:#fff;}
+.modal-row.jp b{background:var(--jp);} .modal-row.kr b{background:var(--kr);} .modal-row.wd b{background:var(--wd);}
+.modal-link{margin-top:14px; padding:14px; border-radius:12px; background:#f4f1fc; font-size:13.5px; font-weight:600;}
+.modal-link .tag{display:block; font-size:10.5px; font-weight:800; color:var(--accent); margin-bottom:6px; letter-spacing:.05em;}
+.modal-close{
+  display:block; width:100%; margin-top:18px; padding:12px; border:none; border-radius:12px;
+  background:var(--accent); color:#fff; font-weight:800; font-size:14px; font-family:inherit; cursor:pointer;
+}
+
+/* quiz */
+.quiz-card{background:var(--card); border-radius:var(--radius); padding:20px 18px; border:1px solid var(--line); box-shadow:0 1px 3px rgba(20,10,40,.06);}
+.quiz-progress{font-size:11px; color:var(--sub); font-weight:700; margin-bottom:10px; display:flex; justify-content:space-between;}
+.lock-box{text-align:center; padding:36px 14px;}
+.lock-emoji{font-size:40px; margin-bottom:12px;}
+.lock-title{font-size:16px; font-weight:800; margin-bottom:6px;}
+.lock-sub{font-size:13px; color:var(--sub);}
+.q-tag{display:inline-block; font-size:11px; font-weight:800; color:#fff; background:var(--accent); padding:4px 10px; border-radius:999px; margin-bottom:12px;}
+.q-prompt{font-size:15px; font-weight:800; margin-bottom:12px;}
+.q-subject{
+  padding:14px; border-radius:12px; font-size:15px; font-weight:700; margin-bottom:16px; text-align:center;
+}
+.q-subject.jp{background:var(--jp-bg); color:var(--jp);}
+.q-subject.kr{background:var(--kr-bg); color:var(--kr);}
+.q-subject.wd{background:var(--wd-bg); color:var(--wd);}
+.q-subject.era{background:#f1edfb; color:var(--accent);}
+.opt-list{display:flex; flex-direction:column; gap:9px;}
+.opt-btn{
+  text-align:left; padding:13px 14px; border-radius:12px; border:2px solid var(--line); background:#fff;
+  font-size:14px; font-weight:600; font-family:inherit; cursor:pointer; color:var(--ink);
+}
+.opt-btn:active{background:#f5f3fa;}
+.opt-btn.correct{border-color:var(--wd); background:var(--wd-bg); color:#1f5c2c;}
+.opt-btn.wrong{border-color:var(--jp); background:var(--jp-bg); color:#8f2a2f;}
+.opt-btn:disabled{cursor:default;}
+.result-banner{text-align:center; font-weight:800; font-size:16px; padding:10px; border-radius:10px; margin-bottom:14px;}
+.result-banner.ok{background:var(--wd-bg); color:#1f5c2c;}
+.result-banner.ng{background:var(--jp-bg); color:#8f2a2f;}
+.done-box{text-align:center; padding:30px 10px;}
+.done-emoji{font-size:44px;}
+.stat-row{display:flex; justify-content:center; gap:18px; margin:16px 0; font-size:13px;}
+.stat-num{font-size:22px; font-weight:800; color:var(--accent); display:block;}
+.restart-btn{
+  margin-top:10px; padding:11px 18px; border:none; border-radius:12px; background:var(--accent); color:#fff;
+  font-weight:800; font-size:13px; font-family:inherit; cursor:pointer;
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <h1>三国年表クイズ<small>日本史・世界史・韓国史を並べて学ぶ</small></h1>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="timeline">年表</button>
+      <button class="tab-btn" data-tab="quiz">1日1問クイズ</button>
+    </div>
+  </header>
+  <main>
+    <section id="view-timeline" class="view active">
+      <div class="legend">
+        <span class="l-jp">🇯🇵 日本史</span>
+        <span class="l-kr">🇰🇷 韓国・朝鮮史</span>
+        <span class="l-wd">🌍 世界史</span>
+      </div>
+      <div id="timeline-list"></div>
+    </section>
+    <section id="view-quiz" class="view">
+      <div id="quiz-area"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-box" id="modal-box"></div>
+</div>
+
+<script>
+const DATA = [{"id":0,"era":"約380万年前〜","japan":{"period":"原始以前","event":"人類はまだ日本列島にいない"},"korea":{"period":"先史時代","event":"人類はまだ朝鮮半島にいない"},"world":{"event":"アフリカで初期の人類が現れる"},"connection":"人類の歴史はアフリカから始まった"},{"id":1,"era":"約70万〜10万年前","japan":{"period":"旧石器時代以前","event":"日本列島の形が少しずつできる"},"korea":{"period":"旧石器時代","event":"朝鮮半島にも旧石器人が暮らす"},"world":{"event":"人類がアフリカから各地へ広がる"},"connection":"海面が低い時代には陸続きに近く、人や動物が移動した"},{"id":2,"era":"約3万8000年前","japan":{"period":"旧石器時代","event":"日本列島に人々が暮らし始め、石器を使う"},"korea":{"period":"旧石器時代","event":"打製石器を使い、狩りや採集をする"},"world":{"event":"ヨーロッパなどで洞窟壁画が描かれる"},"connection":"日本と朝鮮半島は大陸文化が伝わる道でつながっていた"},{"id":3,"era":"紀元前1万年ごろ","japan":{"period":"縄文時代","event":"土器を使い、定住生活が広がる"},"korea":{"period":"新石器時代","event":"櫛目文土器などを使い、定住が進む"},"world":{"event":"西アジアで農耕・牧畜が始まる"},"connection":"各地で狩猟採集から定住生活へ移っていく"},{"id":4,"era":"紀元前3500年ごろ","japan":{"period":"縄文時代","event":"縄文文化が続く"},"korea":{"period":"新石器時代","event":"農耕が少しずつ始まる"},"world":{"event":"メソポタミアで都市文明と文字が生まれる"},"connection":"文字を持つ文明が世界に現れる"},{"id":5,"era":"紀元前3000年ごろ","japan":{"period":"縄文時代","event":"縄文文化が栄える"},"korea":{"period":"新石器時代","event":"集落生活が広がる"},"world":{"event":"エジプト文明が統一国家をつくる"},"connection":"大河の近くで大文明が発達した"},{"id":6,"era":"紀元前2500年ごろ","japan":{"period":"縄文時代","event":"三内丸山遺跡など大きな集落が栄える"},"korea":{"period":"青銅器時代へ","event":"農耕や青銅器文化が伝わり始める"},"world":{"event":"インダス文明が栄える"},"connection":"アジア各地で農耕と交易が広がる"},{"id":7,"era":"紀元前1600年ごろ","japan":{"period":"縄文時代","event":"縄文文化が続く"},"korea":{"period":"青銅器時代","event":"青銅器を使う社会が広がる"},"world":{"event":"中国で殷が成立し、甲骨文字を使う"},"connection":"中国文明の影響が周辺地域へ広がる"},{"id":8,"era":"紀元前1000年ごろ","japan":{"period":"縄文晩期","event":"稲作が一部に伝わり始める"},"korea":{"period":"古朝鮮","event":"伝説上の檀君朝鮮。のちに古朝鮮が発展"},"world":{"event":"中国で周の時代"},"connection":"稲作や金属器が朝鮮半島を通って日本へ伝わる"},{"id":9,"era":"紀元前4〜3世紀","japan":{"period":"弥生時代","event":"水田稲作と金属器が本格的に広がる"},"korea":{"period":"古朝鮮","event":"鉄器文化が広がる"},"world":{"event":"中国は戦国時代、のち秦が統一"},"connection":"大陸・朝鮮半島から人や技術が日本へ渡る"},{"id":10,"era":"紀元前221年","japan":{"period":"弥生時代","event":"各地にむらや小国ができる"},"korea":{"period":"古朝鮮","event":"中国の統一王朝と交流・対立"},"world":{"event":"秦の始皇帝が中国を統一"},"connection":"東アジアに大きな統一国家が現れた"},{"id":11,"era":"紀元前108年","japan":{"period":"弥生時代","event":"小国同士の争いと交流が進む"},"korea":{"period":"古朝鮮〜漢四郡","event":"漢が古朝鮮を滅ぼし、朝鮮半島北部に郡を置く"},"world":{"event":"漢が東アジアへ勢力を広げる"},"connection":"漢の文化や品物が朝鮮半島経由で日本へ伝わる"},{"id":12,"era":"紀元前1世紀ごろ","japan":{"period":"弥生時代","event":"倭に多くの小国がある"},"korea":{"period":"三国成立期","event":"高句麗が成立する"},"world":{"event":"ローマ帝国が地中海世界を支配"},"connection":"日本・朝鮮・中国の外交関係が始まる"},{"id":13,"era":"57年","japan":{"period":"弥生時代","event":"奴国王が後漢へ使いを送り金印を受ける"},"korea":{"period":"三国成立期","event":"高句麗などの国が成長"},"world":{"event":"後漢が中国を支配"},"connection":"倭の国が中国皇帝と外交を行った"},{"id":14,"era":"2世紀後半","japan":{"period":"弥生時代","event":"倭国大乱が起こる"},"korea":{"period":"三国成立期","event":"高句麗・百済・新羅のもとになる国々が成長"},"world":{"event":"ローマ帝国が繁栄"},"connection":"東アジアでも国同士の争いが増える"},{"id":15,"era":"239年","japan":{"period":"弥生時代","event":"邪馬台国の卑弥呼が魏へ使いを送る"},"korea":{"period":"三国時代へ","event":"高句麗・百済・新羅が発展"},"world":{"event":"中国は三国時代"},"connection":"卑弥呼は中国の魏と結びつき国内を安定させようとした"},{"id":16,"era":"3世紀後半〜","japan":{"period":"古墳時代","event":"大きな古墳が造られ、ヤマト政権が成長"},"korea":{"period":"三国時代","event":"高句麗・百済・新羅が争う"},"world":{"event":"ローマ帝国が東西に分かれていく"},"connection":"朝鮮半島の技術者や文化が日本の国づくりに影響"},{"id":17,"era":"313年","japan":{"period":"古墳時代","event":"ヤマト政権が勢力を広げる"},"korea":{"period":"三国時代","event":"高句麗が楽浪郡を滅ぼす"},"world":{"event":"中国では西晋が混乱"},"connection":"中国の支配が弱まり、朝鮮半島の国々が強くなる"},{"id":18,"era":"4世紀後半","japan":{"period":"古墳時代","event":"ヤマト政権が朝鮮半島諸国と交流・軍事関係を持つ"},"korea":{"period":"三国時代","event":"高句麗が南へ勢力を拡大"},"world":{"event":"ヨーロッパで民族大移動が始まる"},"connection":"日本と百済の結びつきが特に深くなる"},{"id":19,"era":"391年ごろ","japan":{"period":"古墳時代","event":"倭が朝鮮半島へ進出した記録が残る"},"korea":{"period":"三国時代","event":"高句麗の広開土王が領土を広げる"},"world":{"event":"ローマ帝国末期"},"connection":"広開土王碑に倭との戦いに関する記録がある"},{"id":20,"era":"5世紀","japan":{"period":"古墳時代","event":"倭の五王が中国南朝へ使いを送る"},"korea":{"period":"三国時代","event":"高句麗が平壌へ都を移し、百済を圧迫"},"world":{"event":"西ローマ帝国が476年に滅亡"},"connection":"東アジアで国の正統性を中国皇帝に認めてもらう外交が行われた"},{"id":21,"era":"538年ごろ","japan":{"period":"古墳時代","event":"百済から仏教が伝わる"},"korea":{"period":"三国時代","event":"百済が日本へ仏像や経典を送る"},"world":{"event":"ヨーロッパではキリスト教が広がる"},"connection":"仏教・文字・学問が朝鮮半島から日本へ伝わる"},{"id":22,"era":"562年","japan":{"period":"古墳時代","event":"朝鮮半島南部との関係が変化"},"korea":{"period":"三国時代","event":"新羅が加耶諸国を統合"},"world":{"event":"東ローマ帝国が栄える"},"connection":"加耶の鉄や人々の移動が日本文化にも影響した"},{"id":23,"era":"593年","japan":{"period":"飛鳥時代","event":"聖徳太子が推古天皇を助ける"},"korea":{"period":"三国時代","event":"高句麗・百済・新羅が対立"},"world":{"event":"ヨーロッパは中世初期"},"connection":"日本は大陸の制度を学び国づくりを進める"},{"id":24,"era":"607年","japan":{"period":"飛鳥時代","event":"小野妹子を隋へ送る（遣隋使）"},"korea":{"period":"三国時代","event":"三国が隋と外交"},"world":{"event":"中国は隋の時代"},"connection":"日本も朝鮮三国も中国の新しい制度を学んだ"},{"id":25,"era":"618年","japan":{"period":"飛鳥時代","event":"遣唐使を通じ唐の制度を学ぶ"},"korea":{"period":"三国時代","event":"三国が唐と外交・戦争"},"world":{"event":"中国で唐が成立"},"connection":"唐を中心に東アジアの国際関係が作られる"},{"id":26,"era":"645年","japan":{"period":"飛鳥時代","event":"大化の改新が始まる"},"korea":{"period":"三国時代","event":"新羅が唐と協力を強める"},"world":{"event":"イスラム教が西アジアに広がる"},"connection":"日本は唐にならった中央集権国家を目指す"},{"id":27,"era":"660年","japan":{"period":"飛鳥時代","event":"百済復興を助けるため朝鮮半島へ軍を送る"},"korea":{"period":"三国時代","event":"百済が新羅・唐に滅ぼされる"},"world":{"event":"唐が東アジアで強い力を持つ"},"connection":"多くの百済の人々が日本へ渡った"},{"id":28,"era":"663年","japan":{"period":"飛鳥時代","event":"白村江の戦いで唐・新羅連合軍に敗れる"},"korea":{"period":"三国時代","event":"新羅・唐連合軍が日本・百済復興軍を破る"},"world":{"event":"唐が繁栄"},"connection":"敗戦後、日本は九州の防衛と国づくりを急いだ"},{"id":29,"era":"668年","japan":{"period":"飛鳥時代","event":"防衛体制を整える"},"korea":{"period":"統一新羅・渤海へ","event":"高句麗が滅亡。のち新羅が半島の大部分を統一"},"world":{"event":"イスラム帝国が拡大"},"connection":"百済・高句麗の遺民が日本や渤海へ移動した"},{"id":30,"era":"701年","japan":{"period":"飛鳥時代","event":"大宝律令を定める"},"korea":{"period":"統一新羅・渤海","event":"統一新羅が栄え、北に渤海が成立"},"world":{"event":"唐が繁栄"},"connection":"日本も律令にもとづく国家制度を整えた"},{"id":31,"era":"710年","japan":{"period":"奈良時代","event":"平城京に都を移す"},"korea":{"period":"統一新羅・渤海","event":"新羅の都・慶州が国際都市として栄える"},"world":{"event":"唐の長安が国際都市として繁栄"},"connection":"都のつくりや文化に唐・朝鮮半島の影響が見られる"},{"id":32,"era":"752年","japan":{"period":"奈良時代","event":"東大寺の大仏開眼供養"},"korea":{"period":"統一新羅・渤海","event":"仏教文化が栄える"},"world":{"event":"イスラム世界と唐の交易が盛ん"},"connection":"東アジア全体で仏教文化が大きく発展"},{"id":33,"era":"794年","japan":{"period":"平安時代","event":"平安京に都を移す"},"korea":{"period":"統一新羅・渤海","event":"新羅がしだいに混乱"},"world":{"event":"西ヨーロッパでカール大帝が活躍"},"connection":"日本は貴族中心の社会へ移る"},{"id":34,"era":"894年","japan":{"period":"平安時代","event":"遣唐使を停止する"},"korea":{"period":"後三国時代へ","event":"新羅が弱まり各地で反乱"},"world":{"event":"唐が907年に滅亡"},"connection":"日本では大陸文化をもとに国風文化が育つ"},{"id":35,"era":"918年","japan":{"period":"平安時代","event":"藤原氏が力を強める"},"korea":{"period":"高麗","event":"王建が高麗を建国"},"world":{"event":"中国は五代十国時代"},"connection":"高麗が朝鮮半島の新しい統一王朝となる"},{"id":36,"era":"936年","japan":{"period":"平安時代","event":"貴族政治が続く"},"korea":{"period":"高麗","event":"高麗が後三国を統一"},"world":{"event":"中国では宋成立前夜"},"connection":"朝鮮半島が再び統一された"},{"id":37,"era":"960年","japan":{"period":"平安時代","event":"国風文化が栄える"},"korea":{"period":"高麗","event":"科挙や仏教文化が発達"},"world":{"event":"中国で宋が成立"},"connection":"東アジアで学問・印刷・交易が発達"},{"id":38,"era":"1018年","japan":{"period":"平安時代","event":"藤原道長の時代"},"korea":{"period":"高麗","event":"契丹の侵入を退ける"},"world":{"event":"ヨーロッパで封建社会が進む"},"connection":"日本と高麗の公式交流は少ないが交易は続く"},{"id":39,"era":"1050年ごろ","japan":{"period":"平安時代","event":"武士が成長する"},"korea":{"period":"高麗","event":"高麗青磁が発達"},"world":{"event":"ヨーロッパで都市と商業が成長"},"connection":"各地で特色ある中世文化が育つ"},{"id":40,"era":"1096年","japan":{"period":"平安時代","event":"院政の時代"},"korea":{"period":"高麗","event":"文臣中心の政治"},"world":{"event":"第1回十字軍が始まる"},"connection":"ユーラシア各地で宗教を背景に争いと交流が起こる"},{"id":41,"era":"1156〜1159年","japan":{"period":"平安時代末期","event":"保元・平治の乱で武士が政治の中心へ"},"korea":{"period":"高麗","event":"1170年に武臣政権が始まる"},"world":{"event":"ヨーロッパで王権と封建諸侯が争う"},"connection":"日本と高麗で武人の力が強まった"},{"id":42,"era":"1185年","japan":{"period":"鎌倉時代","event":"平氏が滅び、源頼朝が武家政権を築く"},"korea":{"period":"高麗","event":"武臣政権の時代"},"world":{"event":"ヨーロッパで十字軍が続く"},"connection":"東アジアでも武士・武人の政治が目立つ"},{"id":43,"era":"1206年","japan":{"period":"鎌倉時代","event":"鎌倉幕府が御家人を支配"},"korea":{"period":"高麗","event":"モンゴルとの戦いが始まる前夜"},"world":{"event":"チンギス・ハンがモンゴル帝国を建国"},"connection":"巨大帝国の拡大が日本と高麗にも大きな影響を与える"},{"id":44,"era":"1231年","japan":{"period":"鎌倉時代","event":"北条氏の執権政治"},"korea":{"period":"高麗","event":"モンゴル軍が高麗へ侵攻"},"world":{"event":"モンゴル帝国がユーラシアを征服"},"connection":"高麗は長く抵抗したのち元の強い影響を受ける"},{"id":45,"era":"1274年","japan":{"period":"鎌倉時代","event":"文永の役（元寇）"},"korea":{"period":"高麗","event":"元に従い、日本遠征の船や兵を負担"},"world":{"event":"元が中国と広い地域を支配"},"connection":"元・高麗連合軍が九州へ攻めた"},{"id":46,"era":"1281年","japan":{"period":"鎌倉時代","event":"弘安の役。元・高麗軍を退ける"},"korea":{"period":"高麗","event":"再び日本遠征に参加"},"world":{"event":"元の大帝国が続く"},"connection":"元寇は日本と高麗双方に大きな負担を与えた"},{"id":47,"era":"1333年","japan":{"period":"南北朝時代へ","event":"鎌倉幕府が滅亡"},"korea":{"period":"高麗末期","event":"元の支配が弱まり改革を進める"},"world":{"event":"ヨーロッパで百年戦争が始まるころ"},"connection":"各地で中世の政治秩序が揺らぐ"},{"id":48,"era":"1338年","japan":{"period":"室町時代","event":"足利尊氏が室町幕府を開く"},"korea":{"period":"高麗末期","event":"倭寇への対応に苦しむ"},"world":{"event":"ヨーロッパで百年戦争"},"connection":"倭寇は日本・朝鮮・中国沿岸で活動した海上勢力"},{"id":49,"era":"1368年","japan":{"period":"室町時代","event":"南北朝の争いが続く"},"korea":{"period":"高麗末期","event":"元との関係を改め、明と外交"},"world":{"event":"中国で明が成立"},"connection":"東アジアの国際秩序が元から明中心へ変わる"},{"id":50,"era":"1392年","japan":{"period":"室町時代","event":"南北朝が統一される"},"korea":{"period":"朝鮮王朝","event":"李成桂が朝鮮王朝を建国"},"world":{"event":"明が中国を支配"},"connection":"日本の室町幕府と朝鮮王朝が外交関係を結ぶ"},{"id":51,"era":"1404年","japan":{"period":"室町時代","event":"日明貿易（勘合貿易）が始まる"},"korea":{"period":"朝鮮王朝","event":"日本と国交を結び、倭寇対策を進める"},"world":{"event":"明が海上交易を管理"},"connection":"日本・朝鮮・明の貿易と外交が結びつく"},{"id":52,"era":"1443年","japan":{"period":"室町時代","event":"対馬の宗氏が朝鮮との貿易を担う"},"korea":{"period":"朝鮮王朝","event":"日本と嘉吉条約を結ぶ"},"world":{"event":"ヨーロッパで活版印刷が広がる"},"connection":"対馬が日本と朝鮮の交流の窓口になる"},{"id":53,"era":"1446年","japan":{"period":"室町時代","event":"室町文化が栄える"},"korea":{"period":"朝鮮王朝","event":"世宗が訓民正音（現在のハングル）を公布"},"world":{"event":"ルネサンスが発展"},"connection":"朝鮮では民衆が学びやすい文字が作られた"},{"id":54,"era":"1467年","japan":{"period":"戦国時代へ","event":"応仁の乱が始まり全国が戦国時代へ"},"korea":{"period":"朝鮮王朝","event":"中央集権体制が続く"},"world":{"event":"ヨーロッパで大航海時代が始まる前夜"},"connection":"日本の内乱で東アジアの貿易にも変化が起きる"},{"id":55,"era":"1492年","japan":{"period":"戦国時代","event":"戦国大名が各地を支配"},"korea":{"period":"朝鮮王朝","event":"儒教にもとづく社会制度が整う"},"world":{"event":"コロンブスがアメリカ大陸に到達"},"connection":"世界の海がつながり、交易圏が大きく広がる"},{"id":56,"era":"1517年","japan":{"period":"戦国時代","event":"戦国大名の争いが続く"},"korea":{"period":"朝鮮王朝","event":"士林派が成長"},"world":{"event":"ルターの宗教改革が始まる"},"connection":"ヨーロッパ社会が宗教をめぐって大きく変化"},{"id":57,"era":"1543年","japan":{"period":"戦国時代","event":"鉄砲が種子島に伝わる"},"korea":{"period":"朝鮮王朝","event":"日本との交易が続く"},"world":{"event":"大航海時代。ポルトガルがアジア交易へ進出"},"connection":"世界交易を通じ新兵器や文化が日本へ入る"},{"id":58,"era":"1549年","japan":{"period":"戦国時代","event":"ザビエルがキリスト教を伝える"},"korea":{"period":"朝鮮王朝","event":"儒教文化が深まる"},"world":{"event":"ヨーロッパで宗教改革と海外進出"},"connection":"キリスト教が海を越えて東アジアへ来た"},{"id":59,"era":"1573年","japan":{"period":"安土桃山時代","event":"織田信長が室町幕府を滅ぼす"},"korea":{"period":"朝鮮王朝","event":"党派の対立が強まる"},"world":{"event":"スペイン・ポルトガルが世界各地へ進出"},"connection":"日本の統一と海外交易が進む"},{"id":60,"era":"1590年","japan":{"period":"安土桃山時代","event":"豊臣秀吉が全国を統一"},"korea":{"period":"朝鮮王朝","event":"日本の侵攻に備えが十分でない"},"world":{"event":"ヨーロッパ諸国がアジアへ進出"},"connection":"秀吉は次に朝鮮・明への進出を目指した"},{"id":61,"era":"1592〜1598年","japan":{"period":"安土桃山時代","event":"豊臣秀吉が朝鮮へ出兵（文禄・慶長の役）"},"korea":{"period":"朝鮮王朝","event":"壬辰倭乱。李舜臣らが戦い、国土が大きな被害"},"world":{"event":"明が朝鮮を援助。世界では海上帝国が競争"},"connection":"日朝双方に多くの犠牲。日本へ連行された陶工もいた"},{"id":62,"era":"1600年","japan":{"period":"安土桃山時代末期","event":"関ヶ原の戦いで徳川家康が勝つ"},"korea":{"period":"朝鮮王朝","event":"戦争からの復興を進める"},"world":{"event":"イギリス東インド会社が設立"},"connection":"アジア交易をめぐるヨーロッパ勢力が強まる"},{"id":63,"era":"1603年","japan":{"period":"江戸時代","event":"徳川家康が江戸幕府を開く"},"korea":{"period":"朝鮮王朝","event":"日本との国交回復を探る"},"world":{"event":"ヨーロッパで絶対王政の時代"},"connection":"日本は長い平和の時代へ向かう"},{"id":64,"era":"1607年","japan":{"period":"江戸時代","event":"朝鮮通信使が来日"},"korea":{"period":"朝鮮王朝","event":"国交回復後、通信使を日本へ送る"},"world":{"event":"大西洋交易が拡大"},"connection":"通信使は平和外交と文化交流の役割を果たした"},{"id":65,"era":"1616年","japan":{"period":"江戸時代","event":"幕府が貿易を管理"},"korea":{"period":"朝鮮王朝","event":"後金（のち清）への対応"},"world":{"event":"ヨーロッパで科学革命が進む"},"connection":"東アジアでは明から清への交代が近づく"},{"id":66,"era":"1636年","japan":{"period":"江戸時代","event":"鎖国体制を強める"},"korea":{"period":"朝鮮王朝","event":"清の侵略を受け服属する"},"world":{"event":"清が中国支配を広げる"},"connection":"日本は朝鮮通信使・対馬を通じ朝鮮との交流を続けた"},{"id":67,"era":"1641年","japan":{"period":"江戸時代","event":"オランダ商館を出島へ移し鎖国体制が完成"},"korea":{"period":"朝鮮王朝","event":"清との朝貢関係が続く"},"world":{"event":"ヨーロッパで三十年戦争終結へ"},"connection":"日本は海外関係を限定したが完全に孤立したわけではない"},{"id":68,"era":"1688年","japan":{"period":"江戸時代","event":"元禄文化が栄える"},"korea":{"period":"朝鮮王朝","event":"実学が発達し始める"},"world":{"event":"イギリスで名誉革命"},"connection":"各地で商業と都市文化が発展"},{"id":69,"era":"1710年代","japan":{"period":"江戸時代","event":"新井白石が政治を行う"},"korea":{"period":"朝鮮王朝","event":"通信使が来日し学術交流"},"world":{"event":"ヨーロッパで啓蒙思想が広がる"},"connection":"日本と朝鮮の知識人が書物や詩を交換した"},{"id":70,"era":"1776年","japan":{"period":"江戸時代","event":"田沼意次の政治"},"korea":{"period":"朝鮮王朝","event":"正祖が改革を進める"},"world":{"event":"アメリカ独立宣言"},"connection":"自由・権利という近代的考えが広がり始める"},{"id":71,"era":"1789年","japan":{"period":"江戸時代","event":"寛政の改革の時代"},"korea":{"period":"朝鮮王朝","event":"正祖が水原華城を築く"},"world":{"event":"フランス革命が始まる"},"connection":"世界で身分制や王権が問い直される"},{"id":72,"era":"1804年","japan":{"period":"江戸時代","event":"ロシア使節レザノフが通商を求める"},"korea":{"period":"朝鮮王朝","event":"勢道政治が始まるころ"},"world":{"event":"ナポレオンが皇帝になる"},"connection":"欧米列強が東アジアへ近づく"},{"id":73,"era":"1839〜1842年","japan":{"period":"江戸時代","event":"幕府が外国船への対応を見直す"},"korea":{"period":"朝鮮王朝","event":"西洋勢力への警戒を強める"},"world":{"event":"アヘン戦争で清がイギリスに敗れる"},"connection":"清の敗北は日本と朝鮮に大きな衝撃を与えた"},{"id":74,"era":"1853年","japan":{"period":"江戸時代末期","event":"ペリーが浦賀に来航し開国を求める"},"korea":{"period":"朝鮮王朝","event":"鎖国的な政策を続ける"},"world":{"event":"欧米列強がアジアへ進出"},"connection":"日本と朝鮮は開国を迫られる時代に入った"},{"id":75,"era":"1854年","japan":{"period":"江戸時代末期","event":"日米和親条約で開国"},"korea":{"period":"朝鮮王朝","event":"列強への警戒を続ける"},"world":{"event":"クリミア戦争が始まる"},"connection":"欧米との不平等な関係が東アジアに広がる"},{"id":76,"era":"1866年","japan":{"period":"江戸時代末期","event":"薩長同盟が成立"},"korea":{"period":"朝鮮王朝","event":"フランス艦隊を退ける（丙寅洋擾）"},"world":{"event":"ヨーロッパで国民国家形成が進む"},"connection":"日朝とも国内体制の変化を迫られた"},{"id":77,"era":"1868年","japan":{"period":"明治時代","event":"明治維新。新政府が成立"},"korea":{"period":"朝鮮王朝","event":"大院君が鎖国政策を続ける"},"world":{"event":"産業革命が世界へ広がる"},"connection":"日本は西洋型の近代国家づくりを急ぐ"},{"id":78,"era":"1871年","japan":{"period":"明治時代","event":"廃藩置県。岩倉使節団が出発"},"korea":{"period":"朝鮮王朝","event":"アメリカ艦隊と衝突（辛未洋擾）"},"world":{"event":"ドイツ帝国が成立"},"connection":"日本と朝鮮で近代化への対応が分かれていく"},{"id":79,"era":"1875〜1876年","japan":{"period":"明治時代","event":"江華島事件後、日朝修好条規を結ぶ"},"korea":{"period":"朝鮮王朝","event":"日本により開港。不平等な内容を含む条約"},"world":{"event":"欧米列強による帝国主義が強まる"},"connection":"日本が朝鮮へ影響力を広げる出発点になった"},{"id":80,"era":"1882年","japan":{"period":"明治時代","event":"朝鮮への影響力をめぐり清と競う"},"korea":{"period":"朝鮮王朝","event":"壬午軍乱が起こる"},"world":{"event":"列強が植民地獲得を進める"},"connection":"朝鮮をめぐる日本と清の対立が深まる"},{"id":81,"era":"1884年","japan":{"period":"明治時代","event":"日本が朝鮮の改革派を支援"},"korea":{"period":"朝鮮王朝","event":"甲申政変が起こるが失敗"},"world":{"event":"ベルリン会議でアフリカ分割が進む"},"connection":"朝鮮国内の改革と外国勢力の競争が重なる"},{"id":82,"era":"1889年","japan":{"period":"明治時代","event":"大日本帝国憲法が発布"},"korea":{"period":"朝鮮王朝","event":"近代化政策を模索"},"world":{"event":"エッフェル塔完成・帝国主義の時代"},"connection":"日本が立憲国家の形を整える"},{"id":83,"era":"1894〜1895年","japan":{"period":"明治時代","event":"日清戦争に勝利"},"korea":{"period":"朝鮮王朝","event":"東学農民運動、甲午改革。清の影響が弱まる"},"world":{"event":"帝国主義列強が中国へ進出"},"connection":"朝鮮をめぐる日本と清の争いが戦争になった"},{"id":84,"era":"1895年","japan":{"period":"明治時代","event":"台湾を植民地にする"},"korea":{"period":"朝鮮王朝","event":"閔妃（明成皇后）が殺害される"},"world":{"event":"列強の植民地競争が激化"},"connection":"日本の朝鮮への圧力がさらに強まる"},{"id":85,"era":"1897年","japan":{"period":"明治時代","event":"産業化・軍備拡張を進める"},"korea":{"period":"大韓帝国","event":"高宗が大韓帝国の成立を宣言"},"world":{"event":"欧米列強が中国分割を進める"},"connection":"朝鮮は独立国家として近代化を目指した"},{"id":86,"era":"1904〜1905年","japan":{"period":"明治時代","event":"日露戦争に勝利"},"korea":{"period":"大韓帝国","event":"戦場となり、日本の保護国化が進む"},"world":{"event":"ロシア革命（1905年）が起こる"},"connection":"日本は朝鮮への支配権を国際的に強めた"},{"id":87,"era":"1905年","japan":{"period":"明治時代","event":"韓国統監府を置く"},"korea":{"period":"大韓帝国","event":"第二次日韓協約で外交権を奪われる"},"world":{"event":"列強の帝国主義が続く"},"connection":"韓国では条約の強制性を問題視し、抵抗が広がった"},{"id":88,"era":"1907年","japan":{"period":"明治時代","event":"韓国の軍隊を解散させる"},"korea":{"period":"大韓帝国","event":"高宗退位、義兵闘争が拡大"},"world":{"event":"世界で民族運動が広がる"},"connection":"日本の支配強化に対し韓国人の抵抗が続いた"},{"id":89,"era":"1910年","japan":{"period":"明治時代","event":"韓国併合。朝鮮総督府を置く"},"korea":{"period":"日本統治時代","event":"大韓帝国が終わり、日本の植民地支配が始まる"},"world":{"event":"帝国主義の時代"},"connection":"この時代は現在の日韓関係を考えるうえでも重要"},{"id":90,"era":"1912年","japan":{"period":"大正時代","event":"大正時代が始まる"},"korea":{"period":"日本統治時代","event":"武断統治のもとで土地調査などが進められる"},"world":{"event":"中華民国が成立"},"connection":"東アジアで王朝・帝国の体制が変化する"},{"id":91,"era":"1914〜1918年","japan":{"period":"大正時代","event":"連合国側で第一次世界大戦に参加"},"korea":{"period":"日本統治時代","event":"朝鮮人も戦争景気や統治の影響を受ける"},"world":{"event":"第一次世界大戦"},"connection":"日本は戦争を機に中国・太平洋へ勢力を広げた"},{"id":92,"era":"1917年","japan":{"period":"大正時代","event":"大戦景気が続く"},"korea":{"period":"日本統治時代","event":"独立運動の機運が高まる"},"world":{"event":"ロシア革命"},"connection":"民族自決や社会主義の考えが世界へ広がる"},{"id":93,"era":"1919年","japan":{"period":"大正時代","event":"普通選挙を求める運動などが広がる"},"korea":{"period":"日本統治時代","event":"三・一独立運動。上海で大韓民国臨時政府が成立"},"world":{"event":"パリ講和会議、国際連盟成立へ"},"connection":"民族自決の考えが朝鮮独立運動を後押しした"},{"id":94,"era":"1920年代","japan":{"period":"大正〜昭和","event":"大正デモクラシー、都市文化が発展"},"korea":{"period":"日本統治時代","event":"文化政治へ移るが植民地支配は続く"},"world":{"event":"ラジオ・映画・大衆文化が世界で普及"},"connection":"近代的な都市文化が日本と朝鮮で広がる一方、差別も続いた"},{"id":95,"era":"1923年","japan":{"period":"大正時代","event":"関東大震災。混乱の中で朝鮮人虐殺が起きる"},"korea":{"period":"日本統治時代","event":"在日朝鮮人も被害を受ける"},"world":{"event":"ヨーロッパは第一次大戦後の混乱"},"connection":"流言と差別が重大な人権侵害につながった"},{"id":96,"era":"1925年","japan":{"period":"大正時代","event":"普通選挙法と治安維持法が成立"},"korea":{"period":"日本統治時代","event":"独立運動への取り締まりが続く"},"world":{"event":"各地で民主主義と独裁がせめぎ合う"},"connection":"権利拡大と思想統制が同時に進んだ"},{"id":97,"era":"1929年","japan":{"period":"昭和時代","event":"世界恐慌で不景気が深刻化"},"korea":{"period":"日本統治時代","event":"農村や労働者の生活が苦しくなる"},"world":{"event":"世界恐慌"},"connection":"経済危機が軍国主義や独裁政治の広がりにつながる"},{"id":98,"era":"1931年","japan":{"period":"昭和時代","event":"満州事変を起こす"},"korea":{"period":"日本統治時代","event":"日本の大陸侵略の兵站・動員拠点となる"},"world":{"event":"世界恐慌後、国際対立が強まる"},"connection":"日本の軍部が政治への力を強めた"},{"id":99,"era":"1932年","japan":{"period":"昭和時代","event":"満州国を建国。五・一五事件"},"korea":{"period":"日本統治時代","event":"抗日運動が中国東北部などでも続く"},"world":{"event":"ナチ党がドイツで勢力を伸ばす"},"connection":"東アジアとヨーロッパで軍国主義・独裁が強まる"},{"id":100,"era":"1933年","japan":{"period":"昭和時代","event":"国際連盟を脱退"},"korea":{"period":"日本統治時代","event":"皇民化政策へ向かう圧力が強まる"},"world":{"event":"ヒトラーがドイツ首相になる"},"connection":"国際協調が崩れ、第二次世界大戦へ近づく"},{"id":101,"era":"1937年","japan":{"period":"昭和時代","event":"日中戦争が始まる"},"korea":{"period":"日本統治時代","event":"朝鮮で戦争協力の強制が強まる"},"world":{"event":"ドイツ・イタリア・日本が接近"},"connection":"日本の戦争拡大に朝鮮半島の人々も巻き込まれた"},{"id":102,"era":"1938年","japan":{"period":"昭和時代","event":"国家総動員法が成立"},"korea":{"period":"日本統治時代","event":"志願兵制度など動員が拡大"},"world":{"event":"ヨーロッパでナチスの侵略が進む"},"connection":"人・物・言葉・教育まで戦争のために統制された"},{"id":103,"era":"1939年","japan":{"period":"昭和時代","event":"戦時体制をさらに強める"},"korea":{"period":"日本統治時代","event":"創氏改名が実施される"},"world":{"event":"ドイツのポーランド侵攻で第二次世界大戦が始まる"},"connection":"日本統治下で朝鮮人の名前や文化にも同化圧力がかかった"},{"id":104,"era":"1940年","japan":{"period":"昭和時代","event":"日独伊三国同盟を結ぶ"},"korea":{"period":"日本統治時代","event":"皇民化・戦時動員が強化"},"world":{"event":"ドイツが西ヨーロッパを占領"},"connection":"日本は枢軸国として世界大戦との結びつきを強めた"},{"id":105,"era":"1941年","japan":{"period":"昭和時代","event":"真珠湾攻撃。太平洋戦争が始まる"},"korea":{"period":"日本統治時代","event":"朝鮮から労働力・兵力・物資の動員が拡大"},"world":{"event":"独ソ戦、太平洋戦争"},"connection":"第二次世界大戦が文字どおり世界規模になった"},{"id":106,"era":"1943年","japan":{"period":"昭和時代","event":"戦況が悪化し学徒出陣"},"korea":{"period":"日本統治時代","event":"徴兵制が実施される"},"world":{"event":"連合国が反攻。カイロ宣言で朝鮮独立方針"},"connection":"連合国は将来の朝鮮独立を示した"},{"id":107,"era":"1944年","japan":{"period":"昭和時代","event":"本土空襲が激しくなる"},"korea":{"period":"日本統治時代","event":"徴用・女子勤労動員などが拡大"},"world":{"event":"連合国がノルマンディー上陸"},"connection":"戦争末期、民間人を含む犠牲が急増した"},{"id":108,"era":"1945年5月","japan":{"period":"昭和時代","event":"沖縄戦が続き、本土も空襲を受ける"},"korea":{"period":"日本統治時代","event":"植民地支配と戦時動員が続く"},"world":{"event":"ドイツが降伏しヨーロッパの戦争が終わる"},"connection":"戦争の中心がアジア・太平洋に残った"},{"id":109,"era":"1945年8月6・9日","japan":{"period":"昭和時代","event":"広島・長崎に原子爆弾が投下される"},"korea":{"period":"日本統治時代","event":"日本国内にいた朝鮮人も被爆する"},"world":{"event":"史上初めて原子爆弾が実戦使用される"},"connection":"国籍を問わず多くの市民が犠牲になった"},{"id":110,"era":"1945年8月8日","japan":{"period":"昭和時代","event":"ソ連が日本へ宣戦"},"korea":{"period":"日本統治時代","event":"ソ連軍が朝鮮半島北部へ進む"},"world":{"event":"ソ連が対日参戦"},"connection":"戦後の朝鮮半島分断につながる動きが始まる"},{"id":111,"era":"1945年8月15日","japan":{"period":"昭和時代","event":"日本がポツダム宣言受諾を国民に発表"},"korea":{"period":"光復","event":"日本の植民地支配が終わり、朝鮮が解放される"},"world":{"event":"第二次世界大戦が終結へ"},"connection":"日本では終戦、韓国では光復の日として記憶される"},{"id":112,"era":"1945年9月2日","japan":{"period":"昭和時代","event":"降伏文書に調印し、第二次世界大戦が正式に終結"},"korea":{"period":"解放直後","event":"朝鮮半島は北緯38度線を境に米ソが分割占領"},"world":{"event":"国際連合が10月に発足"},"connection":"同じ終戦が、日本と朝鮮半島では異なる新しい時代の始まりとなった"}];
+
+/* ---------- utilities ---------- */
+function pad2(n){return n<10?'0'+n:''+n;}
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+}
+function yesterdayStr(){
+  const d = new Date(); d.setDate(d.getDate()-1);
+  return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+/* ---------- timeline view ---------- */
+function renderTimeline(){
+  const list = document.getElementById('timeline-list');
+  const frag = document.createDocumentFragment();
+  DATA.forEach(row=>{
+    const card = document.createElement('div');
+    card.className = 'era-card';
+    card.innerHTML = `
+      <div class="era-head">${row.era}</div>
+      <div class="era-cols">
+        <div class="col jp">
+          <span class="col-badge">日</span>
+          <span class="col-period">${row.japan.period}</span>
+          <button class="event-btn" data-id="${row.id}">${row.japan.event}</button>
+        </div>
+        <div class="col wd">
+          <span class="col-badge">世</span>
+          <span class="col-period">世界</span>
+          <button class="event-btn" data-id="${row.id}">${row.world.event}</button>
+        </div>
+        <div class="col kr">
+          <span class="col-badge">韓</span>
+          <span class="col-period">${row.korea.period}</span>
+          <button class="event-btn" data-id="${row.id}">${row.korea.event}</button>
+        </div>
+      </div>`;
+    frag.appendChild(card);
+  });
+  list.appendChild(frag);
+  list.addEventListener('click', e=>{
+    const btn = e.target.closest('.event-btn');
+    if(!btn) return;
+    openConnectionModal(parseInt(btn.dataset.id,10));
+  });
+}
+
+function openConnectionModal(id){
+  const row = DATA.find(r=>r.id===id);
+  const box = document.getElementById('modal-box');
+  box.innerHTML = `
+    <div class="modal-era">${row.era}</div>
+    <div class="modal-row jp"><b>日本</b><span>${row.japan.event}</span></div>
+    <div class="modal-row wd"><b>世界</b><span>${row.world.event}</span></div>
+    <div class="modal-row kr"><b>韓国</b><span>${row.korea.event}</span></div>
+    <div class="modal-link"><span class="tag">三つの歴史のつながり</span>${row.connection}</div>
+    <button class="modal-close" id="modal-close-btn">閉じる</button>`;
+  document.getElementById('modal').classList.add('show');
+  document.getElementById('modal-close-btn').onclick = closeModal;
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+document.getElementById('modal').addEventListener('click', e=>{
+  if(e.target.id==='modal') closeModal();
+});
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('view-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='quiz') renderQuiz();
+  });
+});
+
+/* ---------- quiz state ---------- */
+const STORAGE_KEY = 'nenpyoQuizState_v1';
+function loadState(){
+  let s = null;
+  try{ s = JSON.parse(localStorage.getItem(STORAGE_KEY)); }catch(e){}
+  if(!s){
+    s = {
+      phase:'main', mainIndex:0, wrongIds:[], reviewQueue:[],
+      pending:null, todayRecord:null,
+      stats:{totalAnswered:0,totalCorrect:0,streakDays:0,lastStreakDate:null}
+    };
+  }
+  return s;
+}
+function saveState(s){ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+
+function getHourStatus(){
+  const h = new Date().getHours();
+  if(h<19) return 'before';
+  if(h>=23) return 'after';
+  return 'open';
+}
+
+function currentTargetRow(state){
+  if(state.phase==='main'){
+    if(state.mainIndex >= DATA.length){
+      if(state.wrongIds.length>0){
+        state.phase='review';
+        state.reviewQueue = state.wrongIds.slice();
+        state.wrongIds = [];
+      } else {
+        state.phase='done';
+        return null;
+      }
+    } else {
+      return DATA[state.mainIndex];
+    }
+  }
+  if(state.phase==='review'){
+    if(state.reviewQueue.length===0){ state.phase='done'; return null; }
+    return DATA[state.reviewQueue[0]];
+  }
+  return null;
+}
+
+function buildQuestion(row){
+  const patterns = ['event2era','event2country','era2event'];
+  const patternType = pick(patterns);
+  const cats = ['japan','korea','world'];
+  const catLabel = {japan:'日本史', korea:'韓国・朝鮮史', world:'世界史'};
+  const catClass = {japan:'jp', korea:'kr', world:'wd'};
+
+  if(patternType==='event2era'){
+    const cat = pick(cats);
+    const eventText = row[cat].event;
+    const others = shuffle(DATA.filter(r=>r.id!==row.id && r.era!==row.era));
+    const distractors = [];
+    for(const r of others){ if(distractors.length>=3) break; if(!distractors.includes(r.era)) distractors.push(r.era); }
+    const options = shuffle([row.era, ...distractors]);
+    return {
+      patternType, cat, catClass:catClass[cat],
+      prompt:'次の出来事が起きたのはいつごろ？',
+      subjectLabel: catLabel[cat],
+      subjectText: eventText,
+      options, correctText: row.era, id: row.id
+    };
+  }
+  if(patternType==='event2country'){
+    const cat = pick(cats);
+    const eventText = row[cat].event;
+    const options = shuffle(['日本史','韓国・朝鮮史','世界史']);
+    return {
+      patternType, cat, catClass:'era',
+      prompt:'次の出来事は、どの歴史の出来事？',
+      subjectLabel: '出来事（' + row.era + '）',
+      subjectText: eventText,
+      options, correctText: catLabel[cat], id: row.id
+    };
+  }
+  // era2event
+  const cat = pick(cats);
+  const others = shuffle(DATA.filter(r=>r.id!==row.id));
+  const distractors = [];
+  for(const r of others){ if(distractors.length>=3) break; const t=r[cat].event; if(t!==row[cat].event && !distractors.includes(t)) distractors.push(t); }
+  const options = shuffle([row[cat].event, ...distractors]);
+  return {
+    patternType, cat, catClass:'era',
+    prompt: '「' + row.era + '」ごろに起きた' + catLabel[cat] + 'の出来事は？',
+    subjectLabel: '年代',
+    subjectText: row.era,
+    options, correctText: row[cat].event, id: row.id
+  };
+}
+
+function renderQuiz(){
+  const area = document.getElementById('quiz-area');
+  const state = loadState();
+  const today = todayStr();
+
+  if(state.todayRecord && state.todayRecord.date===today){
+    renderTodayResult(area, state, state.todayRecord);
+    return;
+  }
+
+  const row = currentTargetRow(state);
+  saveState(state);
+  if(!row){
+    renderDone(area, state);
+    return;
+  }
+
+  const hourStatus = getHourStatus();
+  if(hourStatus!=='open'){
+    renderLocked(area, state, hourStatus);
+    return;
+  }
+
+  if(!state.pending || state.pending.date!==today || state.pending.rowId!==row.id){
+    const q = buildQuestion(row);
+    state.pending = Object.assign({date:today, rowId:row.id, phaseAtAsk: state.phase}, q);
+    saveState(state);
+  }
+  renderQuestion(area, state);
+}
+
+function progressLabel(state){
+  const doneMain = Math.min(state.mainIndex, DATA.length);
+  if(state.phase==='main') return `年表 ${doneMain}/${DATA.length}問`;
+  if(state.phase==='review') return `復習モード（残り${state.reviewQueue.length}問）`;
+  return '全問学習済み';
+}
+
+function renderLocked(area, state, hourStatus){
+  const msg = hourStatus==='before'
+    ? {emoji:'🌙', title:'19時から挑戦できます', sub:'今日の1問は 19:00〜23:00 の間だけ挑戦できます。少し待っていてね。'}
+    : {emoji:'🌃', title:'今日の挑戦時間は終わりました', sub:'また明日 19:00 になったら次の問題に挑戦できます。'};
+  area.innerHTML = `
+    <div class="quiz-card">
+      <div class="quiz-progress"><span>${progressLabel(state)}</span><span>${state.stats.streakDays}日連続</span></div>
+      <div class="lock-box">
+        <div class="lock-emoji">${msg.emoji}</div>
+        <div class="lock-title">${msg.title}</div>
+        <div class="lock-sub">${msg.sub}</div>
+      </div>
+    </div>`;
+}
+
+function renderQuestion(area, state){
+  const q = state.pending;
+  area.innerHTML = `
+    <div class="quiz-card">
+      <div class="quiz-progress"><span>${progressLabel(state)}</span><span>${state.stats.streakDays}日連続</span></div>
+      <span class="q-tag">${q.subjectLabel}</span>
+      <div class="q-prompt">${q.prompt}</div>
+      <div class="q-subject ${q.catClass}">${q.subjectText}</div>
+      <div class="opt-list" id="opt-list"></div>
+    </div>`;
+  const list = area.querySelector('#opt-list');
+  q.options.forEach(opt=>{
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = opt;
+    b.onclick = ()=>answerQuestion(opt);
+    list.appendChild(b);
+  });
+}
+
+function answerQuestion(selected){
+  const state = loadState();
+  const q = state.pending;
+  if(!q) return;
+  const correct = selected === q.correctText;
+  const row = DATA.find(r=>r.id===q.id);
+
+  if(q.phaseAtAsk==='main'){
+    if(!correct) state.wrongIds.push(q.id);
+    state.mainIndex += 1;
+  } else if(q.phaseAtAsk==='review'){
+    state.reviewQueue.shift();
+    if(!correct) state.reviewQueue.push(q.id);
+  }
+
+  const today = todayStr();
+  state.stats.totalAnswered += 1;
+  if(correct) state.stats.totalCorrect += 1;
+  if(state.stats.lastStreakDate===yesterdayStr()) state.stats.streakDays += 1;
+  else if(state.stats.lastStreakDate!==today) state.stats.streakDays = 1;
+  state.stats.lastStreakDate = today;
+
+  state.todayRecord = {
+    date:today, correct, selected,
+    correctText:q.correctText, prompt:q.prompt,
+    subjectLabel:q.subjectLabel, subjectText:q.subjectText,
+    era:row.era, connection:row.connection,
+    japan:row.japan.event, korea:row.korea.event, world:row.world.event
+  };
+  state.pending = null;
+  saveState(state);
+  renderQuiz();
+}
+
+function renderTodayResult(area, state, rec){
+  area.innerHTML = `
+    <div class="quiz-card">
+      <div class="quiz-progress"><span>${progressLabel(state)}</span><span>${state.stats.streakDays}日連続</span></div>
+      <div class="result-banner ${rec.correct?'ok':'ng'}">${rec.correct?'⭕ 正解！':'❌ 残念、不正解'}</div>
+      <span class="q-tag">${rec.subjectLabel}</span>
+      <div class="q-prompt">${rec.prompt}</div>
+      <div class="q-subject era">${rec.subjectText}</div>
+      <div class="modal-row" style="background:#f1edfb;margin-top:10px;"><b style="background:var(--accent)">正解</b><span>${rec.correctText}</span></div>
+      <div class="modal-link"><span class="tag">三つの歴史のつながり（${rec.era}）</span>${rec.connection}</div>
+      <div class="lock-sub" style="text-align:center;margin-top:14px;">今日の挑戦はここまで。また明日 19:00 に次の問題が挑戦できます。</div>
+    </div>`;
+}
+
+function renderDone(area, state){
+  area.innerHTML = `
+    <div class="quiz-card done-box">
+      <div class="done-emoji">🎉</div>
+      <div class="lock-title">全113問クリア！</div>
+      <div class="lock-sub">原始時代から1945年まで、3つの歴史を毎日コツコツ学びました。</div>
+      <div class="stat-row">
+        <div><span class="stat-num">${state.stats.totalAnswered}</span>回答数</div>
+        <div><span class="stat-num">${state.stats.totalCorrect}</span>正解数</div>
+        <div><span class="stat-num">${state.stats.streakDays}</span>連続日数</div>
+      </div>
+      <button class="restart-btn" id="restart-btn">もう一度最初から挑戦する</button>
+    </div>`;
+  document.getElementById('restart-btn').onclick = ()=>{
+    if(confirm('進捗をリセットして最初の問題からやり直します。よろしいですか？')){
+      localStorage.removeItem(STORAGE_KEY);
+      renderQuiz();
+    }
+  };
+}
+
+/* ---------- init ---------- */
+renderTimeline();
+</script>
+</body>
+</html>
