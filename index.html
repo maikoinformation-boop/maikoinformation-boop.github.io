@@ -1,467 +1,362 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>天命占い ✦ 干支運命鑑定</title>
+<title>maiko ♦ スピリチュアル公式サイト</title>
 <style>
   :root {
-    --pink:    #FFB7C5;
-    --pink-l:  #FFE4EC;
-    --pink-d:  #F87EA0;
-    --blue:    #A8D8EA;
-    --blue-l:  #DFF3FB;
-    --blue-d:  #5BBAD5;
-    --yellow:  #FFF0A0;
-    --yellow-d:#F9D923;
-    --cream:   #FFFAF5;
-    --text:    #4A3F5C;
-    --sub:     #8A7A9B;
+    --gold:    #C9A15A;
+    --gold-l:  #F3E6C8;
+    --gold-d:  #A5793A;
+    --pink:    #F2A6BE;
+    --pink-l:  #FCE9EF;
+    --pink-d:  #D9738F;
+    --purple:  #8B6FB0;
+    --purple-l:#EFE7F7;
+    --cream:   #FFFBF4;
+    --text:    #4A3F45;
+    --sub:     #8A7A80;
+    --line:    rgba(201,161,90,0.28);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'Yu Mincho', YuMincho, 'MS Mincho', Georgia, serif;
     background: var(--cream);
     color: var(--text);
-    min-height: 100vh;
+    line-height: 1.8;
     overflow-x: hidden;
   }
-  .bg-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .petal { position: absolute; border-radius: 50%; opacity: 0.2; animation: drift linear infinite; }
-  @keyframes drift {
-    0%   { transform: translateY(-80px) rotate(0deg); opacity: 0; }
-    10%  { opacity: 0.2; }
-    90%  { opacity: 0.2; }
-    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+  /* header */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,251,244,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
   }
-  .wrapper { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 0 18px 60px; }
-  header { text-align: center; padding: 52px 0 28px; }
-  .header-deco { font-size: 11px; letter-spacing: 5px; color: var(--sub); margin-bottom: 12px; display: block; }
-  header h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 900; color: var(--pink-d); line-height: 1.2; margin-bottom: 10px; }
-  header h1 span { display: block; font-size: 52%; font-weight: 600; color: var(--blue-d); letter-spacing: 4px; margin-top: 4px; }
-  .subtitle { font-size: 13px; color: var(--sub); letter-spacing: 1.5px; line-height: 2; }
-  .ornament { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 16px 0; color: var(--pink-d); font-size: 22px; }
-  .ornament::before, .ornament::after { content: ''; width: 60px; height: 1.5px; background: linear-gradient(90deg, transparent, var(--pink-d)); }
-  .ornament::after { background: linear-gradient(90deg, var(--pink-d), transparent); }
-  .card { background: white; border-radius: 28px; padding: 36px 28px; margin-bottom: 24px; box-shadow: 0 4px 32px rgba(248,126,160,0.13); border: 1.5px solid rgba(255,183,197,0.35); position: relative; overflow: hidden; }
-  .card::before { content: ''; position: absolute; top: -30px; right: -30px; width: 110px; height: 110px; border-radius: 50%; background: var(--pink-l); opacity: 0.5; }
-  .card-title { font-size: 15px; font-weight: 700; color: var(--pink-d); margin-bottom: 22px; display: flex; align-items: center; gap: 8px; }
-  .card-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--pink-l), transparent); }
-  .form-group { margin-bottom: 20px; }
-  label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; color: var(--sub); margin-bottom: 8px; }
-  input[type="text"], input[type="date"] {
-    width: 100%; padding: 14px 18px; border: 2px solid var(--pink-l); border-radius: 14px;
-    font-family: inherit; font-size: 15px; color: var(--text); background: var(--cream);
-    outline: none; transition: border-color .25s, box-shadow .25s; -webkit-appearance: none;
+  .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; max-width: 1040px; margin: 0 auto; }
+  .logo { font-size: 22px; font-weight: 700; letter-spacing: 3px; color: var(--gold-d); }
+  .logo span { display: block; font-size: 10px; letter-spacing: 2px; color: var(--sub); margin-top: 2px; font-family: 'Hiragino Kaku Gothic ProN', sans-serif; }
+  nav { display: flex; gap: 26px; }
+  nav a { font-size: 13px; letter-spacing: 1.5px; color: var(--text); position: relative; padding-bottom: 4px; }
+  nav a::after { content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--gold); transition:width .25s; }
+  nav a:hover::after { width:100%; }
+  .nav-toggle { display:none; }
+  @media (max-width: 720px) {
+    nav { position: fixed; top: 62px; left: 0; right: 0; background: var(--cream); flex-direction: column; gap: 0; border-bottom: 1px solid var(--line); transform: translateY(-110%); transition: transform .3s; padding: 8px 0; }
+    nav.open { transform: translateY(0); }
+    nav a { padding: 14px 24px; border-bottom: 1px solid var(--line); }
+    .nav-toggle { display:block; background:none; border:1px solid var(--gold); border-radius:20px; padding:8px 16px; font-size:12px; letter-spacing:2px; color:var(--gold-d); font-family:inherit; }
   }
-  input:focus { border-color: var(--pink-d); box-shadow: 0 0 0 4px rgba(248,126,160,0.12); }
-  .gender-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-  .gender-btn {
-    padding: 13px 8px; border: 2px solid var(--pink-l); border-radius: 12px; background: var(--cream);
-    font-family: inherit; font-size: 14px; color: var(--sub); cursor: pointer; text-align: center;
-    transition: all .2s; font-weight: 700; -webkit-appearance: none;
+
+  /* hero */
+  .hero { position: relative; padding: 90px 24px 70px; text-align: center; overflow: hidden; }
+  .hero::before {
+    content:''; position:absolute; inset:0; z-index:-1;
+    background: radial-gradient(circle at 20% 20%, rgba(242,166,190,0.18), transparent 45%),
+                radial-gradient(circle at 85% 10%, rgba(201,161,90,0.16), transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(139,111,176,0.14), transparent 45%);
   }
-  .gender-btn.active { background: linear-gradient(135deg, var(--pink), var(--blue)); border-color: transparent; color: white; box-shadow: 0 4px 14px rgba(248,126,160,0.3); }
-  .btn-submit {
-    width: 100%; padding: 18px;
-    background: linear-gradient(135deg, var(--pink-d) 0%, #C99CF5 50%, var(--blue-d) 100%);
-    border: none; border-radius: 18px; color: white; font-family: inherit; font-size: 18px;
-    font-weight: 900; letter-spacing: 3px; cursor: pointer; box-shadow: 0 6px 24px rgba(248,126,160,0.35);
-    transition: transform .2s; -webkit-appearance: none;
-  }
-  .btn-submit:active { transform: translateY(1px); }
-  .loader { display: none; text-align: center; padding: 40px; }
-  .loader.active { display: block; }
-  .loader-circles { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; }
-  .loader-dot { width: 12px; height: 12px; border-radius: 50%; animation: bounce .8s ease-in-out infinite; }
-  .loader-dot:nth-child(1) { background: var(--pink-d); animation-delay: 0s; }
-  .loader-dot:nth-child(2) { background: var(--blue-d); animation-delay: .15s; }
-  .loader-dot:nth-child(3) { background: var(--yellow-d); animation-delay: .3s; }
-  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-  .loader p { font-size: 13px; color: var(--sub); letter-spacing: 2px; }
-  #result-section { display: none; }
-  #result-section.visible { display: block; animation: fadeUp .6s ease; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-  .result-card { background: linear-gradient(160deg, #fff 60%, var(--pink-l) 100%); border-radius: 28px; padding: 36px 28px; border: 1.5px solid rgba(255,183,197,0.4); box-shadow: 0 8px 40px rgba(248,126,160,0.14); }
-  .result-header { text-align: center; margin-bottom: 28px; }
-  .result-name { font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
-  .result-name span { color: var(--pink-d); }
-  .stars { display: flex; justify-content: center; gap: 4px; margin: 12px 0 4px; }
-  .star { font-size: 18px; }
-  .pillars-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 20px 0; }
-  .pillar { background: white; border-radius: 18px; padding: 16px 10px; text-align: center; border: 1.5px solid var(--pink-l); box-shadow: 0 2px 12px rgba(248,126,160,0.08); }
-  .pillar-label { font-size: 10px; letter-spacing: 2px; color: var(--sub); margin-bottom: 8px; display: block; }
-  .pillar-kan { font-size: 30px; font-weight: 900; display: block; color: var(--pink-d); }
-  .pillar-shi { font-size: 30px; font-weight: 900; display: block; color: var(--blue-d); }
-  .pillar-ruby { font-size: 10px; color: var(--sub); display: block; margin-top: 2px; }
-  .today-box { background: linear-gradient(135deg, var(--yellow) 0%, var(--pink-l) 100%); border-radius: 18px; padding: 18px 20px; margin: 20px 0; border: 1.5px solid rgba(249,217,35,0.3); }
-  .today-box h3 { font-size: 14px; color: var(--text); margin-bottom: 10px; font-weight: 700; }
-  .today-pillar { display: flex; align-items: center; gap: 12px; }
-  .today-char { font-size: 44px; font-weight: 900; color: var(--pink-d); line-height: 1; }
-  .today-info .title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-  .today-info .desc { font-size: 12px; color: var(--sub); line-height: 1.7; }
-  .fortune-item { background: white; border-radius: 16px; padding: 18px 20px; margin-bottom: 14px; border-left: 4px solid var(--pink); box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
-  .fortune-item:nth-child(2) { border-left-color: var(--blue-d); }
-  .fortune-item:nth-child(3) { border-left-color: var(--yellow-d); }
-  .fortune-item:nth-child(4) { border-left-color: #C99CF5; }
-  .fortune-item h4 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-  .fortune-item p { font-size: 13px; color: var(--sub); line-height: 1.9; }
-  .lucky-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-  .lucky-box { background: white; border-radius: 14px; padding: 14px 16px; text-align: center; border: 1.5px solid var(--pink-l); }
-  .lucky-box .l-label { font-size: 10px; letter-spacing: 2px; color: var(--sub); display: block; margin-bottom: 6px; }
-  .lucky-box .l-value { font-size: 20px; font-weight: 900; color: var(--text); }
-  .kami-box {
-    background: linear-gradient(135deg, #f0e6ff 0%, var(--blue-l) 100%);
-    border-radius: 22px; padding: 26px 22px; margin-top: 20px;
-    border: 1.5px solid rgba(180,150,255,0.3);
-    box-shadow: 0 4px 20px rgba(180,150,255,0.15);
-    text-align: center;
-  }
-  .kami-box h3 { font-size: 14px; font-weight: 700; color: #7B5EA7; margin-bottom: 16px; letter-spacing: 1px; }
-  .kami-name { font-size: 22px; font-weight: 900; color: #6B4FA0; margin-bottom: 6px; }
-  .kami-reading { font-size: 12px; color: var(--sub); letter-spacing: 2px; margin-bottom: 12px; }
-  .kami-power { display: inline-block; background: white; border-radius: 20px; padding: 6px 16px; font-size: 12px; color: #7B5EA7; font-weight: 700; margin-bottom: 14px; border: 1px solid rgba(180,150,255,0.4); }
-  .kami-msg { font-size: 13px; color: var(--sub); line-height: 1.9; text-align: left; }
-  .seminar-box {
-    background: linear-gradient(135deg, #FFF9D6 0%, #FFE4EC 100%);
-    border-radius: 22px; padding: 26px 22px; margin-top: 20px;
-    border: 1.5px solid rgba(249,217,35,0.35);
-    text-align: center;
-  }
-  .seminar-box h3 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: 1px; }
-  .seminar-box p { font-size: 13px; color: var(--sub); line-height: 1.9; margin-bottom: 18px; }
-  .seminar-link {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--pink-d), #C99CF5);
-    color: white; font-family: inherit; font-size: 14px; font-weight: 900;
-    padding: 14px 28px; border-radius: 50px; text-decoration: none;
-    letter-spacing: 1px; box-shadow: 0 4px 18px rgba(248,126,160,0.35);
-    transition: transform .2s;
-  }
-  .seminar-link:active { transform: translateY(1px); }
-  .btn-reset { width: 100%; padding: 14px; background: transparent; border: 2px solid var(--pink-l); border-radius: 14px; color: var(--sub); font-family: inherit; font-size: 14px; cursor: pointer; margin-top: 20px; letter-spacing: 2px; -webkit-appearance: none; }
-  footer { text-align: center; padding: 32px 0 20px; font-size: 11px; color: #c4b8d0; letter-spacing: 2px; line-height: 2.2; }
-  @media (max-width: 480px) {
-    .card, .result-card { padding: 24px 16px; }
-    .pillar-kan, .pillar-shi { font-size: 24px; }
+  .kicker { font-size: 11px; letter-spacing: 5px; color: var(--gold-d); margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(2rem, 5.6vw, 3.1rem); font-weight: 700; color: var(--text); line-height: 1.5; }
+  .hero h1 em { font-style: normal; color: var(--pink-d); }
+  .hero p.lead { max-width: 560px; margin: 26px auto 0; font-size: 15px; color: var(--sub); }
+  .ornament { display:flex; align-items:center; justify-content:center; gap:12px; margin:26px 0; color:var(--gold); font-size:20px; }
+  .ornament::before, .ornament::after { content:''; width:70px; height:1px; background:linear-gradient(90deg, transparent, var(--gold)); }
+  .ornament::after { background:linear-gradient(90deg, var(--gold), transparent); }
+
+  .stats { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top: 38px; }
+  .stat { background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px 26px; min-width:150px; box-shadow: 0 4px 20px rgba(201,161,90,0.08); }
+  .stat .num { font-size: 22px; font-weight:700; color: var(--gold-d); }
+  .stat .label { font-size: 11px; color: var(--sub); letter-spacing: 1px; margin-top: 4px; }
+
+  .cta-row { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top: 36px; }
+  .btn { display:inline-block; padding: 13px 30px; border-radius: 50px; font-size: 13px; letter-spacing: 2px; transition: transform .2s, box-shadow .2s; }
+  .btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold-d)); color:#fff; box-shadow: 0 6px 20px rgba(201,161,90,0.35); }
+  .btn-outline { border: 1.5px solid var(--gold); color: var(--gold-d); background:#fff; }
+  .btn:hover { transform: translateY(-2px); }
+
+  /* section shared */
+  section { padding: 70px 0; }
+  .section-head { text-align:center; margin-bottom: 46px; }
+  .section-head .en { font-size: 11px; letter-spacing: 4px; color: var(--gold-d); }
+  .section-head h2 { font-size: clamp(1.5rem, 3.4vw, 2rem); margin-top: 10px; color: var(--text); }
+  .section-head p { font-size: 13px; color: var(--sub); margin-top: 10px; }
+
+  /* about */
+  .about-grid { display:grid; grid-template-columns: 1fr; gap: 30px; }
+  .about-card { background:#fff; border:1px solid var(--line); border-radius: 22px; padding: 34px 30px; box-shadow: 0 6px 30px rgba(201,161,90,0.08); }
+  .about-list { list-style:none; margin-top: 18px; display:grid; gap: 10px; }
+  .about-list li { font-size: 14px; color: var(--text); padding-left: 22px; position: relative; }
+  .about-list li::before { content:'♦'; position:absolute; left:0; color: var(--gold); font-size: 11px; top: 4px; }
+
+  /* menu cards */
+  .menu-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 26px; }
+  .menu-card { background:#fff; border-radius: 22px; overflow:hidden; border: 1px solid var(--line); box-shadow: 0 6px 26px rgba(201,161,90,0.1); display:flex; flex-direction:column; }
+  .menu-card img { width:100%; aspect-ratio: 4/3; object-fit: cover; }
+  .menu-card .body { padding: 22px 22px 24px; display:flex; flex-direction:column; gap:10px; flex:1; }
+  .tag-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .tag { font-size: 10.5px; letter-spacing:1px; padding: 4px 12px; border-radius: 20px; background: var(--gold-l); color: var(--gold-d); }
+  .tag.pink { background: var(--pink-l); color: var(--pink-d); }
+  .tag.purple { background: var(--purple-l); color: var(--purple); }
+  .menu-card h3 { font-size: 16px; color: var(--text); line-height:1.5; }
+  .menu-card .desc { font-size: 13px; color: var(--sub); flex: 1; }
+  .menu-card .meta { font-size: 12px; color: var(--sub); border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 4px; }
+  .menu-card .price { font-size: 15px; font-weight:700; color: var(--gold-d); }
+  .menu-card .btn { align-self: flex-start; margin-top: 6px; }
+
+  /* event */
+  .event-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; }
+  .event-card { background: linear-gradient(160deg, #fff 60%, var(--purple-l) 120%); border:1px solid var(--line); border-radius: 22px; padding: 28px 26px; box-shadow: 0 6px 26px rgba(139,111,176,0.1); }
+  .event-card.gold { background: linear-gradient(160deg, #fff 60%, var(--gold-l) 120%); }
+  .event-status { display:inline-block; font-size: 11px; letter-spacing:1.5px; padding: 5px 14px; border-radius: 20px; margin-bottom: 14px; }
+  .event-status.open { background: var(--pink-l); color: var(--pink-d); }
+  .event-status.soon { background: var(--gold-l); color: var(--gold-d); }
+  .event-status.plan { background: var(--purple-l); color: var(--purple); }
+  .event-card h3 { font-size: 18px; margin-bottom: 10px; }
+  .event-info { font-size: 13px; color: var(--sub); display:grid; gap: 6px; margin: 14px 0 18px; }
+  .event-info b { color: var(--text); }
+
+  /* sns */
+  .sns { text-align:center; }
+  .sns-icons { display:flex; justify-content:center; gap: 18px; flex-wrap:wrap; margin-top: 30px; }
+  .sns-icons a { width: 74px; height: 74px; border-radius: 50%; background:#fff; border:1px solid var(--line); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow: 0 4px 16px rgba(201,161,90,0.12); transition: transform .2s; }
+  .sns-icons a:hover { transform: translateY(-4px); }
+  .sns-icons .mark { font-size: 17px; font-weight:700; color: var(--gold-d); font-family: Georgia, serif; }
+  .sns-icons .lbl { font-size: 9px; color: var(--sub); letter-spacing: .5px; margin-top: 2px; font-family: 'Hiragino Kaku Gothic ProN', sans-serif; }
+  .fsns a { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-l); display:flex; align-items:center; justify-content:center; font-size: 14px; font-weight:700; color: var(--gold-d); font-family: Georgia, serif; }
+
+  /* footer */
+  footer { background: #fff; border-top: 1px solid var(--line); padding: 40px 24px 28px; text-align:center; }
+  footer .flogo { font-size: 16px; letter-spacing: 3px; color: var(--gold-d); margin-bottom: 10px; }
+  footer p { font-size: 11px; color: var(--sub); letter-spacing: 1px; line-height: 2; }
+  footer .fsns { display:flex; justify-content:center; gap: 14px; margin: 16px 0; font-size: 18px; }
+
+  @media (max-width: 560px) {
+    section { padding: 54px 0; }
+    .hero { padding: 70px 20px 50px; }
+    .stat { min-width: 120px; padding: 14px 18px; }
   }
 </style>
 </head>
 <body>
-<div class="bg-layer" id="bgLayer"></div>
-<div class="wrapper">
-  <header>
-    <span class="header-deco">✦ Ten-Kan Juni-Shi Fortune ✦</span>
-    <h1>天命占い<span>干支・運命鑑定</span></h1>
-    <div class="ornament">✿</div>
-    <p class="subtitle">十干十二支が紡ぐ、あなただけの今日の運命<br>生年月日・お名前・性別を入力してください</p>
-  </header>
 
-  <div id="form-section">
-    <div class="card">
-      <div class="card-title">✦ 鑑定情報の入力</div>
-      <div class="form-group">
-        <label>お名前</label>
-        <input type="text" id="name" placeholder="例：山田 花子" autocomplete="off">
+<header>
+  <div class="header-inner">
+    <div class="logo">maiko<span>スピリチュアル公式サイト</span></div>
+    <button class="nav-toggle" id="navToggle">☰ メニュー</button>
+    <nav id="nav">
+      <a href="#about">プロフィール</a>
+      <a href="#menu">メニュー</a>
+      <a href="#event">イベント</a>
+      <a href="#sns">SNS</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="kicker">✦ SPIRITUAL OFFICIAL SITE ✦</span>
+    <h1>スピリチュアルで<br><em>可愛いお金持ち</em>♡</h1>
+    <p class="lead">霊視・エネルギー調整で1万件超の実績。世界規模の企業案件もサポートしながら、2人の娘と豊かに暮らすママ。「美女メンタル™」創始者・講師のmaikoです。</p>
+    <div class="ornament">✦</div>
+    <div class="stats">
+      <div class="stat"><div class="num">10,000件+</div><div class="label">霊視・エネルギー調整実績</div></div>
+      <div class="stat"><div class="num">年収8桁</div><div class="label">スピリチュアルな仕事で</div></div>
+      <div class="stat"><div class="num">美女メンタル™</div><div class="label">創始者・講師</div></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-gold" href="#menu">メニューを見る</a>
+      <a class="btn btn-outline" href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener">最新情報はInstagramで</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="en">ABOUT</span>
+      <h2>maiko プロフィール</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-card">
+        <p>はじめまして、maikoです。「スピリチュアルで可愛いお金持ち」を実現しながら、2人の娘と豊かに暮らしています。</p>
+        <ul class="about-list">
+          <li>スピリチュアルな仕事で年収8桁</li>
+          <li>2人の娘と豊かに暮らすママ</li>
+          <li>霊視・エネルギー調整で1万件超の実績</li>
+          <li>世界規模の企業案件もサポート</li>
+          <li>「美女メンタル™」創始者・講師</li>
+        </ul>
+        <p style="margin-top:18px; font-size:13px; color:var(--sub);">お客様の感想や講座生の実績も、アメブロ・Instagramで発信しています。リアルタイムの情報はInstagramをチェックしてください。</p>
       </div>
-      <div class="form-group">
-        <label>生年月日</label>
-        <input type="date" id="birthday" min="1900-01-01" max="2025-12-31">
-      </div>
-      <div class="form-group">
-        <label>性別</label>
-        <div class="gender-row">
-          <button class="gender-btn" data-val="女性" onclick="selectGender(this)">♀ 女性</button>
-          <button class="gender-btn" data-val="男性" onclick="selectGender(this)">♂ 男性</button>
-          <button class="gender-btn" data-val="その他" onclick="selectGender(this)">✧ その他</button>
+    </div>
+  </div>
+</section>
+
+<section id="menu" style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="en">MENU</span>
+      <h2>現在受付中のメニュー</h2>
+      <p>個人セッション・講座・動画セミナーなど、あなたに合った形で。</p>
+    </div>
+    <div class="menu-grid">
+
+      <div class="menu-card">
+        <img src="assets/images/menu-session-produce.jpg" alt="開運人生プロデュース 個人セッション">
+        <div class="body">
+          <div class="tag-row"><span class="tag pink">個人セッション</span><span class="tag">3ヶ月継続</span></div>
+          <h3>開運人生プロデュースセッション</h3>
+          <p class="desc">クライアントさん一人ひとりに合わせてセッションスタイルを提案。5次元思考でラクに望みが実現し、自分の心の声が聞き取りやすくなり、自分だけの繁栄ルートが見つかる状態を目指します。</p>
+          <div class="meta">お申し込み受付中・詳細は募集サイトへ</div>
+          <a class="btn btn-outline" href="https://ameblo.jp/maikoshimotsuki/entry-12977413040.html" target="_blank" rel="noopener">詳しく見る</a>
         </div>
       </div>
-      <button class="btn-submit" onclick="startReading()">✦ 天命を鑑定する ✦</button>
-    </div>
-  </div>
 
-  <div class="loader" id="loader">
-    <div class="loader-circles">
-      <div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div>
-    </div>
-    <p>天命を読み解いています…</p>
-  </div>
-
-  <div id="result-section">
-    <div class="result-card">
-      <div class="result-header">
-        <div class="result-name" id="result-name"></div>
-        <div id="result-meta" style="font-size:12px;color:var(--sub);letter-spacing:1px;margin-top:4px;"></div>
-        <div class="stars" id="stars-display"></div>
-      </div>
-      <div class="card-title" style="font-size:14px;">✦ あなたの命柱（年・月・日）</div>
-      <div class="pillars-grid" id="pillars-grid"></div>
-      <div class="today-box">
-        <h3>✦ 今日（<span id="today-date-label"></span>）の日柱</h3>
-        <div class="today-pillar">
-          <div class="today-char" id="today-kan-shi"></div>
-          <div class="today-info">
-            <div class="title" id="today-element"></div>
-            <div class="desc" id="today-desc"></div>
-          </div>
+      <div class="menu-card">
+        <img src="assets/images/menu-course-90days.jpg" alt="開運人生セルフプロデュース講座">
+        <div class="body">
+          <div class="tag-row"><span class="tag">継続講座</span><span class="tag">90日実践型</span></div>
+          <h3>開運人生セルフプロデュース講座</h3>
+          <p class="desc">自分だけの「開運行動」を決めて、誰とも比べない豊かな人生を自分でセルフプロデュースする視点と在り方を身につける講座です。</p>
+          <div class="meta">講座スタート：2026年9月14日（月）<br>受講受付：2026年9月1日〜9月末</div>
+          <a class="btn btn-outline" href="https://ameblo.jp/maikoshimotsuki/entry-12977413040.html" target="_blank" rel="noopener">詳しく見る</a>
         </div>
       </div>
-      <div id="fortune-sections"></div>
-      <div class="lucky-row" id="lucky-row"></div>
-      <div class="kami-box" id="kami-box"></div>
-      <div class="seminar-box">
-        <h3>✦ 神様ともっと深く繋がりたいあなたへ ✦</h3>
-        <p>霊能者歴10年・鑑定実績15,000件以上のmaikoが<br>神様に愛される神社参拝の秘訣をすべてお伝えします。<br>たった2ヶ月で500万円以上が動いた実績も✨</p>
-        <a class="seminar-link" href="https://ameblo.jp/maikoshimotsuki/entry-12961195603.html" target="_blank" rel="noopener">🌸 動画セミナーの詳細はこちら</a>
+
+      <div class="menu-card">
+        <img src="assets/images/menu-video-seminar-kamisama.jpg" alt="神様から100%愛される動画セミナー">
+        <div class="body">
+          <div class="tag-row"><span class="tag">動画セミナー</span><span class="tag pink">永久視聴</span></div>
+          <h3>神様から100％愛される動画セミナー</h3>
+          <p class="desc">今ある悩みから一瞬で抜け出し、お金も愛も成功も受け取れる「意識の使い方」を伝授。お申し込み・お支払い完了後、すぐに視聴できます。</p>
+          <div class="meta">常時お申し込み受付中</div>
+          <a class="btn btn-outline" href="https://ameblo.jp/maikoshimotsuki/entry-12961195603.html" target="_blank" rel="noopener">詳しく見る</a>
+        </div>
       </div>
-      <button class="btn-reset" onclick="resetForm()">✦ もう一度占う</button>
+
+      <div class="menu-card">
+        <div class="body" style="padding-top:22px;">
+          <div class="tag-row"><span class="tag purple">単発講座</span><span class="tag">noteマガジン</span></div>
+          <h3>超現実派の私が辿り着いた<br>日常で自然に育つ「超能力」の伸ばし方</h3>
+          <p class="desc">「超能力なんて現実にはない」と思っていたmaikoが、15,000件以上の鑑定を重ねる中で気づいた、日常にある能力について伝える全6話の連載マガジン。</p>
+          <div class="meta">単体記事：各500円（6話合計3,000円）<br>マガジンまとめ購入：2,000円（1,000円お得）</div>
+          <a class="btn btn-outline" href="https://note.com/master_maiko7788/magazines" target="_blank" rel="noopener">noteで読む</a>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="body" style="padding-top:22px;">
+          <div class="tag-row"><span class="tag">動画講座</span><span class="tag">2コース</span></div>
+          <h3>直観力講座<br>「見えない存在を自分の“肉眼”で見る」</h3>
+          <p class="desc">滝行や修験のような修行は不要。必要なのは、脳の中の思い込みを変える「設定」だけ。maikoの11年間の積み重ねを学べる動画講座です（視聴期間60日）。</p>
+          <div class="meta">最新の開催情報はInstagramでお知らせ</div>
+          <a class="btn btn-outline" href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener">Instagramで見る</a>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="body" style="padding-top:22px;">
+          <div class="tag-row"><span class="tag pink">対面講座</span><span class="tag">福岡限定</span></div>
+          <h3>開運セルフカードリーディング勉強会</h3>
+          <p class="desc">オラクルカードを使い、自分で自分のために開運につながるカードリーディングができるようになる、地元・福岡でのみ開催の対面講座です。</p>
+          <div class="meta">不定期開催・詳細はInstagramストーリーで告知</div>
+          <a class="btn btn-outline" href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener">Instagramで見る</a>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <img src="assets/images/menu-chatgpt-spiritual.jpg" alt="ChatGPTと一緒に売れる形へ変える方法">
+        <div class="body">
+          <div class="tag-row"><span class="tag purple">スピリチュアルビジネス特化</span></div>
+          <h3>ChatGPTと一緒に売れる形へ変える方法</h3>
+          <p class="desc">チャネリング・ヒーリング・カードリーディング・占いなど、スピリチュアルの才能・経験・知識をAIの力で価値ある商品に変えるための完全ガイド。</p>
+          <div class="meta">スピリチュアル系個人事業主・副業者さん向け</div>
+          <a class="btn btn-outline" href="https://ameblo.jp/maikoshimotsuki/" target="_blank" rel="noopener">詳しく見る</a>
+        </div>
+      </div>
+
     </div>
   </div>
+</section>
 
-  <footer>
-    <p>© 2026 maiko, 33works — All Rights Reserved</p>
-    <p>本サイトのコンテンツ・デザイン・占い文章の無断転載・複製を禁じます</p>
-  </footer>
-</div>
+<section id="event">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="en">EVENT</span>
+      <h2>開催イベント情報</h2>
+      <p>対面イベントなどの開催が決まり次第、詳細をお知らせします。</p>
+    </div>
+    <div class="event-grid">
+
+      <div class="event-card">
+        <span class="event-status soon">詳細・募集は10月より開始</span>
+        <h3>クリスマス スピリチュアルパーティー in 福岡</h3>
+        <p style="font-size:13px; color:var(--sub);">東京・西麻布で開催したスピリチュアルお茶会が、福岡でも開催決定！お食事付きのクリスマスパーティーです。</p>
+        <div class="event-info">
+          <div>📅 <b>2026年12月12日（土）</b></div>
+          <div>📍 福岡市天神某所</div>
+          <div>👥 限定20名様</div>
+          <div>💰 お一人様 <b>25,000円</b>（お食事代込）</div>
+        </div>
+        <a class="btn btn-outline" href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener">Instagramで最新情報を見る</a>
+      </div>
+
+      <div class="event-card gold">
+        <span class="event-status plan">企画検討中</span>
+        <h3>スピリチュアル合宿「高野山 1泊2日リトリート」</h3>
+        <p style="font-size:13px; color:var(--sub);">龍神様・弁天様・弘法大師様が祀られる高野山へ。参拝だけでなく、会社や社員の繁栄祈願も込めたリトリートを検討中です。宿坊・食事・移動はすべてmaikoが手配、当日は身体ひとつで参加できる形を予定しています。</p>
+        <div class="event-info">
+          <div>👥 募集人数：3〜最大5名（予定）</div>
+          <div>🗓 開催時期：10月後半〜11月初旬を検討中</div>
+          <div>📝 参加者募集：9月中に開始できる可能性あり</div>
+        </div>
+        <a class="btn btn-outline" href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener">Instagramで最新情報を見る</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="sns" style="background:#fff;">
+  <div class="wrap sns">
+    <div class="section-head">
+      <span class="en">SNS</span>
+      <h2>maikoの発信をチェック</h2>
+      <p>リアルタイムの情報はInstagramで発信しています。</p>
+    </div>
+    <div class="sns-icons">
+      <a href="https://ameblo.jp/maikoshimotsuki/" target="_blank" rel="noopener" title="アメブロ"><span class="mark">Ab</span><span class="lbl">アメブロ</span></a>
+      <a href="https://note.com/master_maiko7788" target="_blank" rel="noopener" title="note"><span class="mark">n</span><span class="lbl">note</span></a>
+      <a href="https://youtube.com/@maiko_spiritual?si=p1cUd9dqrIyiTd4F" target="_blank" rel="noopener" title="YouTube"><span class="mark">▶</span><span class="lbl">YouTube</span></a>
+      <a href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener" title="Instagram"><span class="mark">IG</span><span class="lbl">Instagram</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">maiko</div>
+  <div class="fsns">
+    <a href="https://ameblo.jp/maikoshimotsuki/" target="_blank" rel="noopener" title="アメブロ">Ab</a>
+    <a href="https://note.com/master_maiko7788" target="_blank" rel="noopener" title="note">n</a>
+    <a href="https://youtube.com/@maiko_spiritual?si=p1cUd9dqrIyiTd4F" target="_blank" rel="noopener" title="YouTube">▶</a>
+    <a href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener" title="Instagram">IG</a>
+  </div>
+  <p>© 2026 maiko — All Rights Reserved</p>
+  <p>本サイトのコンテンツ・デザインの無断転載・複製を禁じます</p>
+</footer>
 
 <script>
-const KAN    = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
-const KAN_R  = ['きのえ','きのと','ひのえ','ひのと','つちのえ','つちのと','かのえ','かのと','みずのえ','みずのと'];
-const SHI    = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
-const SHI_R  = ['ね','うし','とら','う','たつ','み','うま','ひつじ','さる','とり','いぬ','い'];
-const GOGYOU = ['木','木','火','火','土','土','金','金','水','水'];
-const YIN_YANG=['陽','陰','陽','陰','陽','陰','陽','陰','陽','陰'];
-
-const KAMI_LIST = [
-  { name:'天之御中主神', reading:'あめのみなかぬしのかみ', power:'宇宙の中心・すべての始まり', msg:'あなたの中心に、宇宙の根源の力が宿っています。迷いが生じたときは静かに内側に問いかけてみて。すべての答えはすでにあなたの中にあります。' },
-  { name:'高御産巣日神', reading:'たかみむすびのかみ', power:'創造・生産・結びの力', msg:'今のあなたには、何かを生み出す強いエネルギーが流れています。アイデアや直感を形にする絶好の時。思い切って動き出してください。' },
-  { name:'神産巣日神', reading:'かみむすびのかみ', power:'縁結び・調和・愛の力', msg:'人と人を結ぶ縁の神様があなたを見守っています。大切な人との絆を深める言葉を伝えてみて。温かい繋がりが運命を動かします。' },
-  { name:'宇摩志阿斯訶備比古遅神', reading:'うましあしかびひこじのかみ', power:'生命力・成長・芽吹きの力', msg:'どんな状況でも芽吹く力があなたには備わっています。今は小さな一歩でいい。その一歩が大きな変容の始まりになります。' },
-  { name:'天之常立神', reading:'あめのとこたちのかみ', power:'永遠・不変・天地の安定', msg:'揺らぎない天の意志があなたを支えています。焦らなくて大丈夫。あなたが歩む道は、すでに天に定められた正しい道です。' },
-  { name:'伊邪那岐命', reading:'いざなぎのみこと', power:'創造・浄化・天地を生む力', msg:'清らかな風があなたの周りを吹き抜けています。古いものを手放し、新しい自分として踏み出す準備が整っています。浄化の恵みを受け取って。' },
-  { name:'伊邪那美命', reading:'いざなみのみこと', power:'生と死・豊穣・慈愛の力', msg:'深い愛と包容力があなたの本質です。自分を責めないで。すべての経験が糧となり、あなたをより豊かな存在へと育てています。' },
-  { name:'天照大御神', reading:'あまてらすおおみかみ', power:'太陽・光・万物を照らす力', msg:'太陽の神様があなたに光を注いでいます。あなたの存在そのものが周りを照らしています。自信を持って、あなたらしく輝いて。' },
-  { name:'月読命', reading:'つくよみのみこと', power:'月・時・潮の満ち引き', msg:'月の神様が流れとタイミングを教えてくれています。今は流れに身を委ねる時。満ちる時が必ず来ます。焦らず、静かに待ちましょう。' },
-  { name:'素戔嗚尊', reading:'すさのおのみこと', power:'嵐・勇気・試練を超える力', msg:'荒波を乗り越える勇気があなたには宿っています。今感じている困難は、あなたをより強くするための試練です。正面から向き合って。' },
-  { name:'大国主命', reading:'おおくにぬしのみこと', power:'縁結び・国造り・医療の知恵', msg:'大地の神様があなたの歩みを支えています。人との縁を大切に、コツコツと積み上げてきたものが、今まさに実を結ぼうとしています。' },
-  { name:'事代主神', reading:'ことしろぬしのかみ', power:'言葉・予言・商売繁盛', msg:'言葉に力が宿る日です。今日あなたが発する言葉は特別な意味を持ちます。ポジティブな言葉を声に出してみて。願いが叶いやすくなります。' },
-  { name:'少名毘古那神', reading:'すくなびこなのかみ', power:'知恵・医術・細部への気づき', msg:'小さなことに宿る大きな力に気づける時です。見落としていた何かに、今日はきっと気づくことができます。繊細な感性を信じて。' },
-  { name:'天宇受売命', reading:'あめのうずめのみこと', power:'芸能・喜び・場を和ます力', msg:'喜びと笑いが運気を開く鍵です。今日は楽しいことを意識して選んでみて。あなたの笑顔が周りの人にも幸運を呼び込みます。' },
-  { name:'玉依姫命', reading:'たまよりひめのみこと', power:'霊的な力・神聖・直感', msg:'霊的な感受性が高まっています。今感じている直感やひらめきを大切にしてください。神様からのメッセージを受け取りやすい特別な時間です。' },
-];
-
-const FORTUNE_MSGS = {
-  overall:[
-    ['今日はあなたの運気が大きく上昇する一日です。天命の流れに乗り、直感を信じて行動すると良いでしょう。新しいことへのチャレンジに最適な星回りです。',5],
-    ['穏やかで安定した運気の一日。焦らずゆっくりと物事を進めることで、確実な成果が生まれます。周囲との調和を大切にして。',4],
-    ['変化の兆しを感じる一日。流れに逆らわず、柔軟に対応することが幸運を引き寄せます。小さな変化も見逃さないで。',4],
-    ['エネルギーを蓄える静の日。無理に動かず、心を整えることに集中すると吉。内省と計画に時間を使いましょう。',3],
-    ['少し注意が必要な日。焦りや感情的な判断は避けて。冷静さを保てれば問題なく乗り越えられます。',3],
-  ],
-  love:[
-    ['愛情運が最高潮！あなたの魅力が輝く一日です。気になる人への一歩を踏み出すなら今日がベスト。パートナーとは深い絆が育まれます。',5],
-    ['穏やかな愛情が流れる日。ふたりの時間をゆっくり過ごすことで絆が深まります。感謝の言葉を伝えてみて。',4],
-    ['新しい出会いの予感。いつもと違う場所に足を運ぶと素敵な縁が生まれるかも。オープンマインドでいてね。',4],
-    ['少し距離を置く時間も必要かも。自分を大切にすることが、良い関係の基盤になります。',3],
-    ['コミュニケーションを丁寧に。誤解が生まれやすい日なので、言葉を選んで伝えることが大切です。',3],
-  ],
-  work:[
-    ['仕事運絶好調！アイデアが次々と湧き出る創造的な一日。積極的に自分の意見を発信すると周囲に認められます。',5],
-    ['コツコツと積み上げることが実を結ぶ日。焦らず、丁寧に仕事をこなすことで信頼が高まります。',4],
-    ['チームワークが鍵。周囲と協力することで、一人では成し遂げられない成果が生まれます。感謝を忘れずに。',4],
-    ['計画を見直す良いタイミング。立ち止まって、今の方向性を確認することで迷いが晴れます。',3],
-    ['無理は禁物。今日は体と心を休めることを優先して。明日の活力を蓄える日と心得て。',3],
-  ],
-  money:[
-    ['金運上昇中！思い切った決断が吉と出る日。投資や新しい収入源の検討に最適なタイミングです。',5],
-    ['堅実な金運の日。衝動買いを避け、計画的な使い方をすることで後悔しない選択ができます。',4],
-    ['臨時収入や嬉しいお知らせの予感。感謝の気持ちを持ちながら受け取ると、さらに良い流れが続きます。',4],
-    ['今日は大きな出費を控えめに。将来のためにコツコツ蓄える意識を持つと吉。',3],
-    ['金銭面では慎重に。書類や数字の確認を丁寧に行うことで、ミスを防ぐことができます。',3],
-  ],
-};
-const LUCKY_COLORS=['桜色','空色','白磁','山吹','薄紫','若草','珊瑚','水晶'];
-const LUCKY_ITEMS =['鏡','手帳','白い花','リボン','水晶','扇子','桃の実','真珠','羽根','糸','鍵','月光石'];
-const LUCKY_DIRS  =['北','北東','東','南東','南','南西','西','北西'];
-const LUCKY_NUMS  =[1,2,3,5,6,7,8,9,11,12];
-const LUCKY_WORDS =['ありがとう','大丈夫','今ここに','信じてる','笑顔','流れに乗る','ありのまま','輝いてる'];
-
-let selectedGender = '';
-function selectGender(btn){
-  document.querySelectorAll('.gender-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedGender = btn.dataset.val;
-}
-
-(function initPetals(){
-  const layer=document.getElementById('bgLayer');
-  const colors=['#FFB7C5','#A8D8EA','#FFF0A0','#FFD6E0','#D4F1F9'];
-  for(let i=0;i<20;i++){
-    const p=document.createElement('div');
-    p.className='petal';
-    const s=Math.random()*16+8;
-    p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*-20}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*12+10}s;animation-delay:${Math.random()*10}s;`;
-    layer.appendChild(p);
-  }
-})();
-
-function getYearPillar(y){ return {kan:((y-4)%10+10)%10,shi:((y-4)%12+12)%12}; }
-function getMonthPillar(y,m){
-  const yearKan=((y-4)%10+10)%10%5;
-  const kanOffset=[2,4,6,8,0];
-  return {kan:(kanOffset[yearKan]+(m-1))%10, shi:((m+1)%12)};
-}
-function getDayPillar(d){
-  const base=new Date(1900,0,31);
-  const diff=Math.floor((d-base)/86400000);
-  return {kan:((diff%10)+10)%10, shi:((diff%12)+12)%12};
-}
-function calcCompat(p1,p2){
-  const g1=GOGYOU[p1.kan],g2=GOGYOU[p2.kan];
-  const s={'木':'火','火':'土','土':'金','金':'水','水':'木'};
-  const k={'木':'土','土':'水','水':'火','火':'金','金':'木'};
-  if(s[g1]===g2) return 5; if(s[g2]===g1) return 4;
-  if(k[g1]===g2) return 2; if(k[g2]===g1) return 3;
-  if(g1===g2) return 4; return 3;
-}
-function starsHtml(n){ let s=''; for(let i=1;i<=5;i++) s+=`<span class="star">${i<=n?'★':'☆'}</span>`; return s; }
-
-function startReading(){
-  const name=document.getElementById('name').value.trim();
-  const bday=document.getElementById('birthday').value;
-  if(!name){ alert('お名前を入力してください'); return; }
-  if(!bday){ alert('生年月日を入力してください'); return; }
-  if(!selectedGender){ alert('性別を選択してください'); return; }
-  document.getElementById('form-section').style.display='none';
-  document.getElementById('loader').classList.add('active');
-  setTimeout(()=>{
-    document.getElementById('loader').classList.remove('active');
-    buildResult(name,bday,selectedGender);
-    const sec=document.getElementById('result-section');
-    sec.classList.add('visible');
-    sec.scrollIntoView({behavior:'smooth',block:'start'});
-  },2200);
-}
-
-function buildResult(name,bday,gender){
-  const bd=new Date(bday);
-  const year=bd.getFullYear(),month=bd.getMonth()+1,day=bd.getDate();
-  const today=new Date();
-  const todayY=today.getFullYear(),todayM=today.getMonth()+1,todayD=today.getDate();
-  const yearP=getYearPillar(year);
-  const monthP=getMonthPillar(year,month);
-  const dayP=getDayPillar(bd);
-  const todayP=getDayPillar(today);
-  const compat=calcCompat(dayP,todayP);
-  const seed=(dayP.kan+todayP.shi+day)%5;
-  const seed2=(yearP.shi+month)%5;
-  const seed3=(monthP.kan+todayD)%5;
-  const seedM=(yearP.kan+todayD)%5;
-  const [oMsg,oStar]=FORTUNE_MSGS.overall[(seed+compat)%5];
-  const [lMsg,lStar]=FORTUNE_MSGS.love[(seed2+compat)%5];
-  const [wMsg,wStar]=FORTUNE_MSGS.work[seed3];
-  const [mMsg,mStar]=FORTUNE_MSGS.money[seedM];
-  const luckyColor=LUCKY_COLORS[(dayP.kan+todayP.kan)%LUCKY_COLORS.length];
-  const luckyItem =LUCKY_ITEMS[(dayP.shi+todayP.shi)%LUCKY_ITEMS.length];
-  const luckyDir  =LUCKY_DIRS[(yearP.shi+todayD)%LUCKY_DIRS.length];
-  const luckyNum  =LUCKY_NUMS[(monthP.shi+todayP.kan)%LUCKY_NUMS.length];
-  const luckyWord =LUCKY_WORDS[(dayP.kan+month)%LUCKY_WORDS.length];
-  const kamiSeed=(year+month+day+todayD+todayM)%KAMI_LIST.length;
-  const kami=KAMI_LIST[kamiSeed];
-
-  document.getElementById('result-name').innerHTML=`<span>${name}</span> さんの天命鑑定`;
-  document.getElementById('result-meta').textContent=`${year}年${month}月${day}日生 ／ ${gender} ／ 本日${todayY}年${todayM}月${todayD}日`;
-  document.getElementById('stars-display').innerHTML=starsHtml(oStar);
-  document.getElementById('pillars-grid').innerHTML=[
-    {label:'年柱',p:yearP},{label:'月柱',p:monthP},{label:'日柱',p:dayP}
-  ].map(({label,p})=>`<div class="pillar"><span class="pillar-label">${label}</span><span class="pillar-kan">${KAN[p.kan]}</span><span class="pillar-ruby">${KAN_R[p.kan]}（${GOGYOU[p.kan]}）</span><span class="pillar-shi">${SHI[p.shi]}</span><span class="pillar-ruby">${SHI_R[p.shi]}</span></div>`).join('');
-  document.getElementById('today-date-label').textContent=`${todayY}年${todayM}月${todayD}日`;
-  document.getElementById('today-kan-shi').textContent=KAN[todayP.kan]+SHI[todayP.shi];
-  const tg=GOGYOU[todayP.kan];
-  const myG=GOGYOU[dayP.kan];
-  document.getElementById('today-element').textContent=`${tg}行・${YIN_YANG[todayP.kan]}の日 ／ ${KAN_R[todayP.kan]}${SHI_R[todayP.shi]}`;
-
-  // 五行の相性（今日 vs あなたの日柱）でパーソナライズ
-  const seisho={'木':'火','火':'土','土':'金','金':'水','水':'木'}; // 相生（生む）
-  const sokoku={'木':'土','土':'水','水':'火','火':'金','金':'木'}; // 相克（剋す）
-  let personalDesc;
-  if(seisho[tg]===myG){
-    // 今日の五行がわたしの五行を生む → 最高の相性
-    const msgs=[
-      `今日の${tg}のエネルギーがあなたの${myG}の力を育んでいます。自然な流れの中で物事が前進しやすい日。新しいことへの挑戦が吉。`,
-      `今日はあなたにとって特別に恵まれた日です。今日の天の気があなたの本来の力を引き出してくれます。直感を信じて動いて。`,
-      `天のエネルギーとあなたの命の気が美しく調和しています。今日やることはすべて良い方向へ向かいます。積極的に行動して。`,
-    ];
-    personalDesc=msgs[(day+todayD)%3];
-  } else if(seisho[myG]===tg){
-    // わたしの五行が今日を生む → 自分のエネルギーを使う日
-    const msgs=[
-      `あなたの${myG}のエネルギーが今日の天に力を与えています。周りのために動くことで、巡り巡ってあなたに恵みが戻ってきます。`,
-      `今日は自分のエネルギーを惜しまず使う日。誰かへの親切や貢献が、未来の大きな幸運の種になります。`,
-      `あなたの本来の力が今日の天に響いています。ギブの精神で過ごすと、思わぬ形で幸運が舞い込んできます。`,
-    ];
-    personalDesc=msgs[(day+todayD)%3];
-  } else if(sokoku[tg]===myG){
-    // 今日の五行があなたを剋す → 少し注意の日
-    const msgs=[
-      `今日の天の気があなたの気質に少し逆風となる日。無理に押し進めず、慎重に確認しながら進むと安心です。`,
-      `今日はいつもより丁寧に、ゆっくり行動することで安定します。焦らず、一つひとつ確実にこなす日です。`,
-      `少し抵抗を感じる場面があるかもしれませんが、それは天があなたに「立ち止まって考えて」と伝えているサイン。深呼吸して。`,
-    ];
-    personalDesc=msgs[(day+todayD)%3];
-  } else if(sokoku[myG]===tg){
-    // あなたが今日の天を剋す → 突破力がある日
-    const msgs=[
-      `あなたの${myG}の力が今日の天の流れを動かせる日。困難に見えることでも、あなたなら乗り越えられる強さがあります。`,
-      `今日は決断と行動の日。あなたの意志の力が最大限に発揮されます。迷っていたことに決着をつけるのに最適です。`,
-      `あなたの命の気が今日の天を超える力を持っています。自分への信頼を持って、堂々と前に進んでください。`,
-    ];
-    personalDesc=msgs[(day+todayD)%3];
-  } else if(tg===myG){
-    // 同気 → 共鳴する日
-    const msgs=[
-      `今日の天の気とあなたの命の気が同じ${tg}。深い共鳴の日です。自分らしくいることが最大の開運になります。`,
-      `あなたの本質が今日の天とぴったり重なっています。「ありのままの自分」で過ごすことで、不思議なほど物事が整っていきます。`,
-      `今日はあなたにとって「自分に還る日」。無理せず、心が喜ぶことを選んで過ごすと運気が上がります。`,
-    ];
-    personalDesc=msgs[(day+todayD)%3];
-  } else {
-    // その他
-    const msgs=[
-      `今日の${tg}のエネルギーとあなたの${myG}の気が静かに交わっています。普段通りに丁寧に過ごすことが運気を安定させます。`,
-      `穏やかな天の気の中、あなたの命の力がしっかり根を張っています。焦らず、今日という日を大切に刻んで。`,
-      `今日は特別なことをしなくても大丈夫。あなたが在るだけで、周りに良い気が流れています。`,
-    ];
-    personalDesc=msgs[(day+todayD)%3];
-  }
-  document.getElementById('today-desc').textContent=personalDesc;
-  document.getElementById('fortune-sections').innerHTML=[
-    {icon:'✦',title:'総合運',msg:oMsg,star:oStar},
-    {icon:'♡',title:'愛情運',msg:lMsg,star:lStar},
-    {icon:'✿',title:'仕事運',msg:wMsg,star:wStar},
-    {icon:'☽',title:'金運',msg:mMsg,star:mStar},
-  ].map(({icon,title,msg,star})=>`<div class="fortune-item"><h4>${icon} ${title}　${starsHtml(star)}</h4><p>${msg}</p></div>`).join('');
-  document.getElementById('lucky-row').innerHTML=[
-    {label:'ラッキーカラー',value:luckyColor},
-    {label:'ラッキーアイテム',value:luckyItem},
-    {label:'ラッキー方位',value:luckyDir},
-    {label:'ラッキーナンバー',value:luckyNum},
-  ].map(({label,value})=>`<div class="lucky-box"><span class="l-label">${label}</span><div class="l-value">${value}</div></div>`).join('')
-  +`<div class="lucky-box" style="grid-column:1/-1;background:linear-gradient(135deg,var(--pink-l),var(--blue-l));"><span class="l-label">今日の開運ワード</span><div class="l-value" style="font-size:18px;">「${luckyWord}」</div></div>`;
-  document.getElementById('kami-box').innerHTML=`<h3>✦ 今日あなたを守護する神様 ✦</h3><div class="kami-name">${kami.name}</div><div class="kami-reading">（${kami.reading}）</div><div class="kami-power">⛩ ${kami.power}</div><p class="kami-msg">${kami.msg}</p>`;
-}
-
-function resetForm(){
-  document.getElementById('result-section').classList.remove('visible');
-  document.getElementById('result-section').style.display='';
-  document.getElementById('form-section').style.display='';
-  document.getElementById('name').value='';
-  document.getElementById('birthday').value='';
-  selectedGender='';
-  document.querySelectorAll('.gender-btn').forEach(b=>b.classList.remove('active'));
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+  const toggle = document.getElementById('navToggle');
+  const nav = document.getElementById('nav');
+  toggle.addEventListener('click', () => nav.classList.toggle('open'));
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
 </script>
 
 </body>
