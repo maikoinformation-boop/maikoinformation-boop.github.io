@@ -134,11 +134,14 @@
   /* sns */
   .sns { text-align:center; }
   .sns-icons { display:flex; justify-content:center; gap: 18px; flex-wrap:wrap; margin-top: 30px; }
-  .sns-icons a { width: 74px; height: 74px; border-radius: 50%; background:#fff; border:1px solid var(--line); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow: 0 4px 16px rgba(201,161,90,0.12); transition: transform .2s; }
-  .sns-icons a:hover { transform: translateY(-4px); }
-  .sns-icons .mark { font-size: 17px; font-weight:700; color: var(--gold-d); font-family: Georgia, serif; }
-  .sns-icons .lbl { font-size: 9px; color: var(--sub); letter-spacing: .5px; margin-top: 2px; font-family: 'Hiragino Kaku Gothic ProN', sans-serif; }
-  .fsns a { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-l); display:flex; align-items:center; justify-content:center; font-size: 14px; font-weight:700; color: var(--gold-d); font-family: Georgia, serif; }
+  .sns-icons a { display:flex; flex-direction:column; align-items:center; gap:9px; }
+  .sns-icons .ico { width: 62px; height: 62px; border-radius: 17px; overflow:hidden; box-shadow: 0 6px 18px rgba(201,161,90,0.18); transition: transform .2s; }
+  .sns-icons .ico svg { display:block; width:100%; height:100%; }
+  .sns-icons a:hover .ico { transform: translateY(-4px); }
+  .sns-icons .lbl { font-size: 11px; color: var(--sub); letter-spacing: .5px; font-family: 'Hiragino Kaku Gothic ProN', sans-serif; }
+  .fsns a { display:flex; align-items:center; justify-content:center; }
+  .fsns .ico { width: 34px; height: 34px; border-radius: 10px; overflow:hidden; }
+  .fsns .ico svg { display:block; width:100%; height:100%; }
 
   /* footer */
   footer { background: #fff; border-top: 1px solid var(--line); padding: 40px 24px 28px; text-align:center; }
@@ -347,10 +350,22 @@
       <p>リアルタイムの情報はInstagramで発信しています。</p>
     </div>
     <div class="sns-icons">
-      <a href="https://ameblo.jp/maikoshimotsuki/" target="_blank" rel="noopener" title="アメブロ"><span class="mark">Ab</span><span class="lbl">アメブロ</span></a>
-      <a href="https://note.com/master_maiko7788" target="_blank" rel="noopener" title="note"><span class="mark">n</span><span class="lbl">note</span></a>
-      <a href="https://youtube.com/@maiko_spiritual?si=p1cUd9dqrIyiTd4F" target="_blank" rel="noopener" title="YouTube"><span class="mark">▶</span><span class="lbl">YouTube</span></a>
-      <a href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener" title="Instagram"><span class="mark">IG</span><span class="lbl">Instagram</span></a>
+      <a href="https://ameblo.jp/maikoshimotsuki/" target="_blank" rel="noopener" title="アメブロ">
+        <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#FF6B4A"/><text x="24" y="32" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800" fill="#fff" text-anchor="middle">a</text></svg></span>
+        <span class="lbl">アメブロ</span>
+      </a>
+      <a href="https://note.com/master_maiko7788" target="_blank" rel="noopener" title="note">
+        <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#41C9B4"/><text x="24" y="33" font-family="Georgia, 'Times New Roman', serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">n</text></svg></span>
+        <span class="lbl">note</span>
+      </a>
+      <a href="https://youtube.com/@maiko_spiritual?si=p1cUd9dqrIyiTd4F" target="_blank" rel="noopener" title="YouTube">
+        <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#FF0000"/><path d="M19 15.5v17l15-8.5-15-8.5z" fill="#fff"/></svg></span>
+        <span class="lbl">YouTube</span>
+      </a>
+      <a href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener" title="Instagram">
+        <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="igg1" x1="0" y1="48" x2="48" y2="0"><stop offset="0%" stop-color="#FEDA77"/><stop offset="35%" stop-color="#F58529"/><stop offset="60%" stop-color="#DD2A7B"/><stop offset="85%" stop-color="#8134AF"/><stop offset="100%" stop-color="#515BD4"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#igg1)"/><rect x="12" y="12" width="24" height="24" rx="7" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="24" cy="24" r="6.5" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="32" cy="16" r="1.8" fill="#fff"/></svg></span>
+        <span class="lbl">Instagram</span>
+      </a>
     </div>
   </div>
 </section>
@@ -358,10 +373,18 @@
 <footer>
   <div class="flogo">maiko</div>
   <div class="fsns">
-    <a href="https://ameblo.jp/maikoshimotsuki/" target="_blank" rel="noopener" title="アメブロ">Ab</a>
-    <a href="https://note.com/master_maiko7788" target="_blank" rel="noopener" title="note">n</a>
-    <a href="https://youtube.com/@maiko_spiritual?si=p1cUd9dqrIyiTd4F" target="_blank" rel="noopener" title="YouTube">▶</a>
-    <a href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener" title="Instagram">IG</a>
+    <a href="https://ameblo.jp/maikoshimotsuki/" target="_blank" rel="noopener" title="アメブロ">
+      <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#FF6B4A"/><text x="24" y="32" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800" fill="#fff" text-anchor="middle">a</text></svg></span>
+    </a>
+    <a href="https://note.com/master_maiko7788" target="_blank" rel="noopener" title="note">
+      <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#41C9B4"/><text x="24" y="33" font-family="Georgia, 'Times New Roman', serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">n</text></svg></span>
+    </a>
+    <a href="https://youtube.com/@maiko_spiritual?si=p1cUd9dqrIyiTd4F" target="_blank" rel="noopener" title="YouTube">
+      <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#FF0000"/><path d="M19 15.5v17l15-8.5-15-8.5z" fill="#fff"/></svg></span>
+    </a>
+    <a href="https://www.instagram.com/master_maiko7788/" target="_blank" rel="noopener" title="Instagram">
+      <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="igg2" x1="0" y1="48" x2="48" y2="0"><stop offset="0%" stop-color="#FEDA77"/><stop offset="35%" stop-color="#F58529"/><stop offset="60%" stop-color="#DD2A7B"/><stop offset="85%" stop-color="#8134AF"/><stop offset="100%" stop-color="#515BD4"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#igg2)"/><rect x="12" y="12" width="24" height="24" rx="7" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="24" cy="24" r="6.5" fill="none" stroke="#fff" stroke-width="2.6"/><circle cx="32" cy="16" r="1.8" fill="#fff"/></svg></span>
+    </a>
   </div>
   <p>© 2026 maiko — All Rights Reserved</p>
   <p>本サイトのコンテンツ・デザインの無断転載・複製を禁じます</p>
